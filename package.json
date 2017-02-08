@@ -1,0 +1,33 @@
+{
+  "name": "detective-typescript",
+  "version": "1.0.0",
+  "author": "Patrik Henningsson <patrik.henningsson@gmail.com>",
+  "description": "Get the dependencies of a TypeScript module",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint index.js test/test.js && mocha test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pahen/detective-typescript.git"
+  },
+  "keywords": [
+    "detective",
+    "typescript",
+    "dependencies",
+    "module",
+    "ast",
+    "import"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/pahen/detective-typescript",
+  "dependencies": {
+    "node-source-walk": "3.2.0",
+    "typescript": "2.0.10",
+    "typescript-eslint-parser": "1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "3.14.0",
+    "mocha": "2.0.1"
+  }
+}
