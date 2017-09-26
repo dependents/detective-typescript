@@ -5,12 +5,13 @@ var Walker = require('node-source-walk');
  * Extracts the dependencies of the supplied TypeScript module
  *
  * @param  {String|Object} src - File's content or AST
+ * @param  {Object} options - options to pass to the parser
  * @return {String[]}
  */
-module.exports = function(src) {
-  var walker = new Walker({
-    parser: Parser
-  });
+module.exports = function(src, options = {}) {
+  options.parser = Parser;
+
+  var walker = new Walker(options);
 
   var dependencies = [];
 
