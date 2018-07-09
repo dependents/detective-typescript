@@ -27,7 +27,7 @@
     "typescript-eslint-parser": "^15.0.0"
   },
   "devDependencies": {
-    "eslint": "3.14.0",
+    "eslint": "^4.19.1",
     "mocha": "^5.2.0"
   }
 }
