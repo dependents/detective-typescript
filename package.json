@@ -19,6 +19,9 @@
     "ast",
     "import"
   ],
+  "engines": {
+    "node": ">=6.0"
+  },
   "license": "MIT",
   "homepage": "https://github.com/pahen/detective-typescript",
   "dependencies": {
