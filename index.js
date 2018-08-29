@@ -1,5 +1,7 @@
-var Parser = require('typescript-eslint-parser');
-var Walker = require('node-source-walk');
+'use strict';
+
+const Parser = require('typescript-eslint-parser');
+const Walker = require('node-source-walk');
 
 /**
  * Extracts the dependencies of the supplied TypeScript module
@@ -8,11 +10,11 @@ var Walker = require('node-source-walk');
  * @return {String[]}
  */
 module.exports = function(src) {
-  var walker = new Walker({
+  const walker = new Walker({
     parser: Parser
   });
 
-  var dependencies = [];
+  const dependencies = [];
 
   if (typeof src === 'undefined') {
     throw new Error('src not given');
