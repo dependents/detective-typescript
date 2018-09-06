@@ -19,15 +19,18 @@
     "ast",
     "import"
   ],
+  "engines": {
+    "node": ">=6.0"
+  },
   "license": "MIT",
   "homepage": "https://github.com/pahen/detective-typescript",
   "dependencies": {
-    "node-source-walk": "^3.3.0",
-    "typescript": "^2.8.3",
-    "typescript-eslint-parser": "^15.0.0"
+    "node-source-walk": "^4.0.0",
+    "typescript": "^3.0.3",
+    "typescript-eslint-parser": "^18.0.0"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
+    "eslint": "^5.5.0",
     "mocha": "^5.2.0"
   }
 }
