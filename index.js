@@ -9,10 +9,9 @@ const Walker = require('node-source-walk');
  * @param  {String|Object} src - File's content or AST
  * @return {String[]}
  */
-module.exports = function(src) {
-  const walker = new Walker({
-    parser: Parser
-  });
+module.exports = function(src, options = {}) {
+  options.parser = Parser;
+  const walker = new Walker(options);
 
   const dependencies = [];
 
