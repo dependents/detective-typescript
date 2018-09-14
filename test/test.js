@@ -88,8 +88,14 @@ describe('detective-typescript', () => {
       detective(`import foo from 'foo'; var baz = <baz>bar;`);
     });
   });
-  
-  it('does not throw with JSX in a module', () => {
+
+  it('throws with JSX in a module and !ecmaFeatures.jsx', () => {
+    assert.throws(() => {
+      detective(`import Foo from 'Foo'; var foo = <Foo/>`);
+    });
+  });
+
+  it('does not throw with JSX in a module and ecmaFeatures.jsx', () => {
     assert.doesNotThrow(() => {
       detective(`import Foo from 'Foo'; var foo = <Foo/>`, { ecmaFeatures: { jsx: true } });
     });
