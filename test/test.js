@@ -83,7 +83,7 @@ describe('detective-typescript', () => {
     }, Error, 'src not given');
   });
 
-  it('does not throw with jsx in a module', () => {
+  it('does not throw with angle bracket type assertions in a module', () => {
     assert.doesNotThrow(() => {
       detective('import foo from \'foo\'; var baz = <baz>bar;');
     });
