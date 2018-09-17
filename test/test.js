@@ -83,9 +83,21 @@ describe('detective-typescript', () => {
     }, Error, 'src not given');
   });
 
-  it('does not throw with jsx in a module', () => {
+  it('does not throw with angle bracket type assertions in a module', () => {
     assert.doesNotThrow(() => {
-      detective('import foo from \'foo\'; var baz = <baz>bar;');
+      detective(`import foo from 'foo'; var baz = <baz>bar;`);
+    });
+  });
+
+  it('throws with JSX in a module and !ecmaFeatures.jsx', () => {
+    assert.throws(() => {
+      detective(`import Foo from 'Foo'; var foo = <Foo/>`);
+    });
+  });
+
+  it('does not throw with JSX in a module and ecmaFeatures.jsx', () => {
+    assert.doesNotThrow(() => {
+      detective(`import Foo from 'Foo'; var foo = <Foo/>`, { ecmaFeatures: { jsx: true } });
     });
   });
 });
