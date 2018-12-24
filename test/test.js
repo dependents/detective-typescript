@@ -100,4 +100,17 @@ describe('detective-typescript', () => {
       detective(`import Foo from 'Foo'; var foo = <Foo/>`, { ecmaFeatures: { jsx: true } });
     });
   });
+
+  describe('tsx', () => {
+    it('does not throw when given no options', () => {
+      assert.doesNotThrow(() => {
+        detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`);
+      });
+    });
+
+    it('returns the import of a tsx file', () => {
+      const results = detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`, { ecmaFeatures: { jsx: true } });
+      assert.equal(results[0], 'Foo');
+    });
+  });
 });
