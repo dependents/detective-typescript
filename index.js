@@ -49,7 +49,6 @@ module.exports = function(src, options = {}) {
   return dependencies;
 };
 
-module.exports.tsx = function(src, options = {}) {
-  options.ecmaFeatures = Object.assign(options.ecmaFeatures || {}, { jsx: true });
+module.exports.tsx = function(src, options = {jsx: true}) {
   return module.exports(src, options);
 };

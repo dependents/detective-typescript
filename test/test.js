@@ -89,15 +89,15 @@ describe('detective-typescript', () => {
     });
   });
 
-  it('throws with JSX in a module and !ecmaFeatures.jsx', () => {
+  it('throws with JSX in a module and !parserOptions.jsx', () => {
     assert.throws(() => {
       detective(`import Foo from 'Foo'; var foo = <Foo/>`);
     });
   });
 
-  it('does not throw with JSX in a module and ecmaFeatures.jsx', () => {
+  it('does not throw with JSX in a module and parserOptions.jsx', () => {
     assert.doesNotThrow(() => {
-      detective(`import Foo from 'Foo'; var foo = <Foo/>`, { ecmaFeatures: { jsx: true } });
+      detective(`import Foo from 'Foo'; var foo = <Foo/>`, { jsx: true });
     });
   });
 
@@ -109,7 +109,7 @@ describe('detective-typescript', () => {
     });
 
     it('returns the import of a tsx file', () => {
-      const results = detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`, { ecmaFeatures: { jsx: true } });
+      const results = detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`, { jsx: true });
       assert.equal(results[0], 'Foo');
     });
   });

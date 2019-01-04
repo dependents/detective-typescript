@@ -25,12 +25,12 @@
   "license": "MIT",
   "homepage": "https://github.com/pahen/detective-typescript",
   "dependencies": {
-    "node-source-walk": "^4.0.0",
-    "typescript": "^3.0.3",
-    "typescript-eslint-parser": "^18.0.0"
+    "node-source-walk": "4.2.0",
+    "typescript": "3.1.1",
+    "typescript-eslint-parser": "21.0.2"
   },
   "devDependencies": {
-    "eslint": "^5.5.0",
+    "eslint": "5.11.1",
     "mocha": "^5.2.0"
   }
 }
