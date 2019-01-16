@@ -1,6 +1,6 @@
 'use strict';
 
-const Parser = require('typescript-eslint-parser');
+const Parser = require('typescript-estree');
 const Walker = require('node-source-walk');
 
 /**
