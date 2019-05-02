@@ -25,6 +25,11 @@ module.exports = function(src, options = {}) {
 
   walker.walk(src, function(node) {
     switch (node.type) {
+      case 'Import':
+        if (node.parent && node.parent.type === 'CallExpression' && node.parent.arguments.length) {
+          dependencies.push(node.parent.arguments[0].value);
+        }
+        break;
       case 'ImportDeclaration':
         if (node.source && node.source.value) {
           dependencies.push(node.source.value);
