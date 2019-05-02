@@ -61,6 +61,12 @@ describe('detective-typescript', () => {
     assert(deps[0] === 'foo');
   });
 
+  it('handles dynamic imports', () => {
+    const deps = detective('import("foo");');
+    assert(deps.length === 1);
+    assert(deps[0] === 'foo');
+  });
+
   it('retrieves dependencies from modules using "export ="', () => {
     const deps = detective('import foo = require("mylib");');
     assert(deps.length === 1);
