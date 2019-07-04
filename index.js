@@ -46,6 +46,11 @@ module.exports = function(src, options = {}) {
           dependencies.push(node.expression.value);
         }
         break;
+      case 'TSImportType':
+        if (node.parameter.type === 'TSLiteralType') {
+          dependencies.push(node.parameter.literal.value);
+        }
+        break;
       default:
         return;
     }

@@ -119,4 +119,10 @@ describe('detective-typescript', () => {
       assert.equal(results[0], 'Foo');
     });
   });
+
+  it('parses out type annotation imports', () => {
+    const deps = detective('const x: typeof import("foo") = 0;');
+    assert(deps.length === 1);
+    assert(deps[0] === 'foo');
+  });
 });
