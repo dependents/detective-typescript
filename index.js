@@ -11,14 +11,15 @@ const Walker = require('node-source-walk');
  */
 module.exports = function(src, options = {}) {
 
+  const walkerOptions = Object.assign({}, options, {parser: Parser});
+
   // Determine whether to skip "type-only" imports
   // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types
   const skipTypeImports = Boolean(options.skipTypeImports);
   // Remove skipTypeImports option, as this option may not be recognized by the walker/parser
-  delete options.skipTypeImports;
+  delete walkerOptions.skipTypeImports;
 
-  options.parser = Parser;
-  const walker = new Walker(options);
+  const walker = new Walker(walkerOptions);
 
   const dependencies = [];
 
