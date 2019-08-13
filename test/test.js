@@ -125,4 +125,10 @@ describe('detective-typescript', () => {
     assert(deps.length === 1);
     assert(deps[0] === 'foo');
   });
+
+  it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
+    const deps = detective('const x: typeof import("foo") = 0;', {skipTypeImports: true});
+    assert(deps.length === 0);
+  });
+
 });
