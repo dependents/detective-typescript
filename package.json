@@ -26,7 +26,6 @@
   "homepage": "https://github.com/pahen/detective-typescript",
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^2.4.0",
-    "madge": "^3.4.4",
     "node-source-walk": "^4.2.0",
     "typescript": "^3.6.4"
   },
