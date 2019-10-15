@@ -1,6 +1,6 @@
 {
   "name": "detective-typescript",
-  "version": "5.6.0",
+  "version": "5.6.1",
   "author": "Patrik Henningsson <patrik.henningsson@gmail.com>",
   "description": "Get the dependencies of a TypeScript module",
   "main": "index.js",
