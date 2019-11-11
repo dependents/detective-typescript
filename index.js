@@ -2,6 +2,7 @@
 
 const Parser = require('@typescript-eslint/typescript-estree');
 const Walker = require('node-source-walk');
+const types = require('ast-module-types');
 
 /**
  * Extracts the dependencies of the supplied TypeScript module
@@ -18,6 +19,9 @@ module.exports = function(src, options = {}) {
   const skipTypeImports = Boolean(options.skipTypeImports);
   // Remove skipTypeImports option, as this option may not be recognized by the walker/parser
   delete walkerOptions.skipTypeImports;
+
+  const mixedImports = Boolean(options.mixedImports);
+  delete walkerOptions.mixedImports;
 
   const walker = new Walker(walkerOptions);
 
@@ -59,6 +63,23 @@ module.exports = function(src, options = {}) {
           dependencies.push(node.parameter.literal.value);
         }
         break;
+      case 'CallExpression':
+        if (!mixedImports || !types.isRequire(node) ||
+            !node.arguments ||
+            !node.arguments.length) {
+          break;
+        }
+
+        if (types.isPlainRequire(node)) {
+          const result = extractDependencyFromRequire(node);
+          if (result) {
+            dependencies.push(result);
+          }
+        } else if (types.isMainScopedRequire(node)) {
+          dependencies.push(extractDependencyFromMainRequire(node));
+        }
+
+        break;
       default:
         return;
     }
@@ -67,6 +88,18 @@ module.exports = function(src, options = {}) {
   return dependencies;
 };
 
-module.exports.tsx = function(src, options = {jsx: true}) {
-  return module.exports(src, options);
+module.exports.tsx = function(src, options) {
+  return module.exports(src, Object.assign({}, options, { jsx: true }));
 };
+
+function extractDependencyFromRequire(node) {
+  if (node.arguments[0].type === 'Literal' || node.arguments[0].type === 'StringLiteral') {
+    return node.arguments[0].value;
+  } else if (node.arguments[0].type === 'TemplateLiteral') {
+    return node.arguments[0].quasis[0].value.raw;
+  }
+}
+
+function extractDependencyFromMainRequire(node) {
+  return node.arguments[0].value;
+}
