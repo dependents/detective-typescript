@@ -16,6 +16,7 @@ module.exports = function(src, options = {}) {
 
   // Determine whether to skip "type-only" imports
   // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types
+  // https://www.typescriptlang.org/v2/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
   const skipTypeImports = Boolean(options.skipTypeImports);
   // Remove skipTypeImports option, as this option may not be recognized by the walker/parser
   delete walkerOptions.skipTypeImports;
@@ -43,6 +44,9 @@ module.exports = function(src, options = {}) {
         }
         break;
       case 'ImportDeclaration':
+        if (skipTypeImports && node.importKind == 'type') {
+          break;
+        }
         if (node.source && node.source.value) {
           dependencies.push(node.source.value);
         }
