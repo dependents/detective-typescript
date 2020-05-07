@@ -131,6 +131,17 @@ describe('detective-typescript', () => {
     assert(deps.length === 0);
   });
 
+  it('parses out TypeScript >=3.8 type imports', () => {
+    const deps = detective('import type { Foo } from "foo"');
+    assert(deps.length === 1);
+    assert(deps[0] === 'foo');
+  })
+
+  it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
+    const deps = detective('import type { Foo } from "foo"', {skipTypeImports: true});
+    assert(deps.length === 0);
+  });
+
   it('supports CJS when mixedImports is true', () => {
     const deps = detective('const foo = require("foobar")', { mixedImports: true });
     assert(deps.length === 1);
