@@ -147,4 +147,9 @@ describe('detective-typescript', () => {
     assert(deps.length === 1);
     assert(deps[0] === 'foobar');
   })
+
+  it('does not count dynamic imports if module name is string-interpolated', () => {
+    const deps = detective('const filename = "ts.svg"; import(`./${filename}`);');
+    assert(deps.length === 0);
+  })
 });
