@@ -20,7 +20,7 @@
     "import"
   ],
   "engines": {
-    "node": ">=6.0"
+    "node": "^10.13 || >=12.0.0"
   },
   "license": "MIT",
   "homepage": "https://github.com/pahen/detective-typescript",
