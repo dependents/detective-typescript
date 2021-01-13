@@ -67,6 +67,17 @@ describe('detective-typescript', () => {
     assert(deps[0] === 'foo');
   });
 
+  it('handles runtime dynamic imports with option', () => {
+    const deps = detective('() => import("foo");', { runtimeDynamicImports: true });
+    assert(deps.length === 1);
+    assert(deps[0] === 'foo');
+  });
+
+  it('does not include runtime dynamic imports without option', () => {
+    const deps = detective('() => import("foo");');
+    assert(deps.length === 0);
+  });
+
   it('retrieves dependencies from modules using "export ="', () => {
     const deps = detective('import foo = require("mylib");');
     assert(deps.length === 1);
