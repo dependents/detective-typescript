@@ -114,8 +114,13 @@ describe('detective-typescript', () => {
       });
     });
 
-    it('returns the import of a tsx file', () => {
-      const results = detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`, { jsx: true });
+    it('returns the import of a tsx file when using option', () => {
+      const results = detective(`import Foo from 'Foo'; var foo = <Foo/>`, { jsx: true });
+      assert.equal(results[0], 'Foo');
+    });
+
+    it('returns the import of a tsx file when using API call', () => {
+      const results = detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`);
       assert.equal(results[0], 'Foo');
     });
   });
