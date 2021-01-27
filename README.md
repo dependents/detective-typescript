@@ -12,22 +12,13 @@ var mySourceCode = fs.readFileSync('myfile.ts', 'utf8');
 
 // Pass in a file's content or an AST
 var dependencies = detective(mySourceCode);
-
-```
-
-### Usage with TSX
-
-```js
-var detective = require('detective-typescript');
-var mySourceCode = fs.readFileSync('myfile.tsx', 'utf8');
-var dependencies = detective.tsx(mySourceCode);
-
 ```
 
 ### Options
 
 - `skipTypeImports` (default: false) - Skips imports that only imports types
 - `mixedImports`: (default: false) - Include CJS imports in dependency list
+- `jsx`: (default: false) - Enable parsing of JSX
 
 #### License
 
