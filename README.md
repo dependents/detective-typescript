@@ -8,11 +8,19 @@
 
 ```js
 var detective = require('detective-typescript');
-
-var mySourceCode = fs.readFileSync('myfile.js', 'utf8');
+var mySourceCode = fs.readFileSync('myfile.ts', 'utf8');
 
 // Pass in a file's content or an AST
 var dependencies = detective(mySourceCode);
+
+```
+
+### Usage with JSX
+
+```js
+var detective = require('detective-typescript');
+var mySourceCode = fs.readFileSync('myfile.tsx', 'utf8');
+var dependencies = detective.jsx(mySourceCode);
 
 ```
 
