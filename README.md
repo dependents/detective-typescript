@@ -15,12 +15,12 @@ var dependencies = detective(mySourceCode);
 
 ```
 
-### Usage with JSX
+### Usage with TSX
 
 ```js
 var detective = require('detective-typescript');
 var mySourceCode = fs.readFileSync('myfile.tsx', 'utf8');
-var dependencies = detective.jsx(mySourceCode);
+var dependencies = detective.tsx(mySourceCode);
 
 ```
 
