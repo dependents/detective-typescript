@@ -16,9 +16,10 @@ var dependencies = detective(mySourceCode);
 
 ### Options
 
-- `skipTypeImports` (default: false) - Skips imports that only imports types
-- `mixedImports`: (default: false) - Include CJS imports in dependency list
-- `jsx`: (default: false) - Enable parsing of JSX
+- `skipTypeImports` (default: false) Skips imports that only imports types
+- `mixedImports`: (default: false) Include CJS imports in dependency list
+- `skipAsyncImports`: (default: false) Whether or not to omit async imports (import('foo'))
+- `jsx`: (default: false) Enable parsing of JSX
 
 #### License
 

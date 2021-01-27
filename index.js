@@ -39,8 +39,8 @@ module.exports = function(src, options = {}) {
   walker.walk(src, function(node) {
     switch (node.type) {
       case 'ImportExpression':
-        if (node.parent && node.parent.type === 'ExpressionStatement' && node.parent.expression.source.type === 'Literal') {
-          dependencies.push(node.parent.expression.source.value);
+        if (!options.skipAsyncImports && node.source && node.source.value) {
+          dependencies.push(node.source.value);
         }
         break;
       case 'ImportDeclaration':

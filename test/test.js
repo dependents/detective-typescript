@@ -67,6 +67,17 @@ describe('detective-typescript', () => {
     assert(deps[0] === 'foo');
   });
 
+  it('handles async imports', () => {
+    const deps = detective('() => import("foo");');
+    assert(deps.length === 1);
+    assert(deps[0] === 'foo');
+  });
+
+  it('skips async imports when using skipAsyncImports', () => {
+    const deps = detective('() => import("foo");', { skipAsyncImports: true });
+    assert(deps.length === 0);
+  });
+
   it('retrieves dependencies from modules using "export ="', () => {
     const deps = detective('import foo = require("mylib");');
     assert(deps.length === 1);
