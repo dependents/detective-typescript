@@ -4,9 +4,14 @@
   "author": "Patrik Henningsson <patrik.henningsson@gmail.com>",
   "description": "Get the dependencies of a TypeScript module",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
-    "test": "eslint index.js test/test.js && mocha test/test.js",
-    "watch": "mocha -w test/test.js"
+    "lint": "eslint index.js test/test.js",
+    "mocha": "mocha",
+    "test": "npm run lint && npm run mocha",
+    "watch": "npm run mocha -- -w"
   },
   "repository": {
     "type": "git",
