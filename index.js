@@ -10,9 +10,8 @@ const types = require('ast-module-types');
  * @param  {String|Object} src - File's content or AST
  * @return {String[]}
  */
-module.exports = function(src, options = {}) {
-
-  const walkerOptions = Object.assign({}, options, {parser: Parser});
+module.exports = (src, options = {}) => {
+  const walkerOptions = { ...options, parser: Parser };
 
   // Determine whether to skip "type-only" imports
   // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types
@@ -24,19 +23,14 @@ module.exports = function(src, options = {}) {
   const mixedImports = Boolean(options.mixedImports);
   delete walkerOptions.mixedImports;
 
-  const walker = new Walker(walkerOptions);
-
   const dependencies = [];
 
-  if (typeof src === 'undefined') {
-    throw new Error('src not given');
-  }
+  if (typeof src === 'undefined') throw new Error('src not given');
+  if (src === '') return dependencies;
 
-  if (src === '') {
-    return dependencies;
-  }
+  const walker = new Walker(walkerOptions);
 
-  walker.walk(src, function(node) {
+  walker.walk(src, (node) => {
     switch (node.type) {
       case 'ImportExpression':
         if (!options.skipAsyncImports && node.source && node.source.value) {
@@ -44,7 +38,7 @@ module.exports = function(src, options = {}) {
         }
         break;
       case 'ImportDeclaration':
-        if (skipTypeImports && node.importKind == 'type') {
+        if (skipTypeImports && node.importKind === 'type') {
           break;
         }
         if (node.source && node.source.value) {
@@ -85,21 +79,23 @@ module.exports = function(src, options = {}) {
 
         break;
       default:
-        return;
+        // nothing
     }
   });
 
   return dependencies;
 };
 
-module.exports.tsx = function(src, options) {
-  return module.exports(src, Object.assign({}, options, { jsx: true }));
+module.exports.tsx = (src, options) => {
+  return module.exports(src, { ...options, jsx: true });
 };
 
 function extractDependencyFromRequire(node) {
   if (node.arguments[0].type === 'Literal' || node.arguments[0].type === 'StringLiteral') {
     return node.arguments[0].value;
-  } else if (node.arguments[0].type === 'TemplateLiteral') {
+  }
+
+  if (node.arguments[0].type === 'TemplateLiteral') {
     return node.arguments[0].quasis[0].value.raw;
   }
 }

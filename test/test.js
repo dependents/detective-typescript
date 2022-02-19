@@ -1,8 +1,9 @@
 /* eslint-env mocha */
+
 'use strict';
 
-const assert = require('assert');
-const detective = require('../');
+const assert = require('assert').strict;
+const detective = require('../index.js');
 
 describe('detective-typescript', () => {
   const ast = {
@@ -27,66 +28,66 @@ describe('detective-typescript', () => {
 
   it('accepts an ast', () => {
     const deps = detective(ast);
-    assert(!deps.length);
+    assert.equal(deps.length, 0);
   });
 
   it('retrieves the dependencies of modules', () => {
     const deps = detective('import {foo, bar} from "mylib";');
-    assert(deps.length === 1);
-    assert(deps[0] === 'mylib');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'mylib');
   });
 
   it('retrieves the re-export dependencies of modules', () => {
     const deps = detective('export {foo, bar} from "mylib";');
-    assert(deps.length === 1);
-    assert(deps[0] === 'mylib');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'mylib');
   });
 
   it('retrieves the re-export * dependencies of modules', () => {
     const deps = detective('export * from "mylib";');
-    assert(deps.length === 1);
-    assert(deps[0] === 'mylib');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'mylib');
   });
 
   it('handles multiple imports', () => {
     const deps = detective('import {foo, bar} from "mylib";\nimport "mylib2"');
-    assert(deps.length === 2);
-    assert(deps[0] === 'mylib');
-    assert(deps[1] === 'mylib2');
+    assert.equal(deps.length,  2);
+    assert.equal(deps[0], 'mylib');
+    assert.equal(deps[1], 'mylib2');
   });
 
   it('handles default imports', () => {
     const deps = detective('import foo from "foo";');
-    assert(deps.length === 1);
-    assert(deps[0] === 'foo');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foo');
   });
 
   it('handles dynamic imports', () => {
     const deps = detective('import("foo");');
-    assert(deps.length === 1);
-    assert(deps[0] === 'foo');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foo');
   });
 
   it('handles async imports', () => {
     const deps = detective('() => import("foo");');
-    assert(deps.length === 1);
-    assert(deps[0] === 'foo');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foo');
   });
 
   it('skips async imports when using skipAsyncImports', () => {
     const deps = detective('() => import("foo");', { skipAsyncImports: true });
-    assert(deps.length === 0);
+    assert.equal(deps.length,  0);
   });
 
   it('retrieves dependencies from modules using "export ="', () => {
     const deps = detective('import foo = require("mylib");');
-    assert(deps.length === 1);
-    assert(deps[0] === 'mylib');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'mylib');
   });
 
   it('returns an empty list for non modules', () => {
     const deps = detective('var foo = require("foo");');
-    assert(!deps.length);
+    assert.equal(deps.length, 0);
   });
 
   it('returns an empty list for empty files', () => {
@@ -138,29 +139,29 @@ describe('detective-typescript', () => {
 
   it('parses out type annotation imports', () => {
     const deps = detective('const x: typeof import("foo") = 0;');
-    assert(deps.length === 1);
-    assert(deps[0] === 'foo');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foo');
   });
 
   it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
     const deps = detective('const x: typeof import("foo") = 0;', {skipTypeImports: true});
-    assert(deps.length === 0);
+    assert.equal(deps.length,  0);
   });
 
   it('parses out TypeScript >=3.8 type imports', () => {
     const deps = detective('import type { Foo } from "foo"');
-    assert(deps.length === 1);
-    assert(deps[0] === 'foo');
-  })
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foo');
+  });
 
   it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
     const deps = detective('import type { Foo } from "foo"', {skipTypeImports: true});
-    assert(deps.length === 0);
+    assert.equal(deps.length,  0);
   });
 
   it('supports CJS when mixedImports is true', () => {
     const deps = detective('const foo = require("foobar")', { mixedImports: true });
-    assert(deps.length === 1);
-    assert(deps[0] === 'foobar');
-  })
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foobar');
+  });
 });

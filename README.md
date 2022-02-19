@@ -2,24 +2,26 @@
 
 > Get the dependencies of TypeScript module
 
-`npm install detective-typescript`
+```sh
+npm install detective-typescript
+```
 
 ### Usage
 
 ```js
-var detective = require('detective-typescript');
-var mySourceCode = fs.readFileSync('myfile.ts', 'utf8');
+const detective = require('detective-typescript');
+const mySourceCode = fs.readFileSync('myfile.ts', 'utf8');
 
 // Pass in a file's content or an AST
-var dependencies = detective(mySourceCode);
+const dependencies = detective(mySourceCode);
 ```
 
 ### Options
 
-- `skipTypeImports` (default: false) Skips imports that only imports types
-- `mixedImports`: (default: false) Include CJS imports in dependency list
-- `skipAsyncImports`: (default: false) Whether or not to omit async imports (import('foo'))
-- `jsx`: (default: false) Enable parsing of JSX
+- `skipTypeImports` (default: `false`) Skips imports that only imports types
+- `mixedImports`: (default: `false`) Include CJS imports in dependency list
+- `skipAsyncImports`: (default: `false`) Whether or not to omit async imports (import('foo'))
+- `jsx`: (default: `false`) Enable parsing of JSX
 
 #### License
 
