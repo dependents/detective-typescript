@@ -31,8 +31,8 @@
   "license": "MIT",
   "homepage": "https://github.com/dependents/detective-typescript",
   "dependencies": {
-    "@typescript-eslint/typescript-estree": "^5.12.0",
-    "ast-module-types": "^2.7.1",
+    "@typescript-eslint/typescript-estree": "^5.12.1",
+    "ast-module-types": "^3.0.0",
     "node-source-walk": "^4.2.2",
     "typescript": "^4.5.5"
   },
