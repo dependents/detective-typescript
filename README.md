@@ -1,4 +1,4 @@
-### detective-typescript [![CI](https://github.com/dependents/detective-typescript/actions/workflows/ci.yml/badge.svg)](https://github.com/dependents/detective-typescript/actions/workflows/ci.yml) [![npm](http://img.shields.io/npm/v/detective-typescript.svg)](https://npmjs.org/package/detective-typescript) [![npm](http://img.shields.io/npm/dm/detective-typescript.svg)](https://npmjs.org/package/detective-typescript)
+### detective-typescript [![CI](https://img.shields.io/github/workflow/status/dependents/detective-typescript/CI/main?label=CI&logo=github)](https://github.com/dependents/detective-typescript/actions/workflows/ci.yml?query=branch%3Amain) [![npm](https://img.shields.io/npm/v/detective-typescript)](https://www.npmjs.com/package/detective-typescript) [![npm](https://img.shields.io/npm/dm/detective-typescript)](https://www.npmjs.com/package/detective-typescript)
 
 > Get the dependencies of TypeScript module
 
