@@ -34,7 +34,7 @@
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^5.13.0",
     "ast-module-types": "^3.0.0",
-    "node-source-walk": "^4.2.2",
+    "node-source-walk": "^5.0.0",
     "typescript": "^4.5.5"
   },
   "devDependencies": {
