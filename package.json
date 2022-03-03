@@ -11,6 +11,7 @@
     "lint": "eslint index.js test/test.js",
     "mocha": "mocha",
     "test": "npm run lint && npm run mocha",
+    "test:ci": "c8 npm run mocha",
     "watch": "npm run mocha -- -w"
   },
   "repository": {
@@ -31,13 +32,14 @@
   "license": "MIT",
   "homepage": "https://github.com/dependents/detective-typescript",
   "dependencies": {
-    "@typescript-eslint/typescript-estree": "^5.12.1",
+    "@typescript-eslint/typescript-estree": "^5.13.0",
     "ast-module-types": "^3.0.0",
     "node-source-walk": "^4.2.2",
     "typescript": "^4.5.5"
   },
   "devDependencies": {
-    "eslint": "^8.9.0",
+    "c8": "^7.11.0",
+    "eslint": "^8.10.0",
     "mocha": "^9.2.1"
   }
 }
