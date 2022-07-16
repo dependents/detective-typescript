@@ -42,7 +42,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['mylib', ['foo', 'bar']]);
+    assert.deepEqual(deps[0], { path: 'mylib', tokens: ['foo', 'bar'] });
   });
 
   it('retrieves the re-export dependencies of modules', () => {
@@ -56,7 +56,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['mylib', ['foo', 'bar']]);
+    assert.deepEqual(deps[0], { path: 'mylib', tokens: ['foo', 'bar'] });
   });
 
   it('retrieves the re-export * dependencies of modules', () => {
@@ -70,7 +70,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['mylib', ['*']]);
+    assert.deepEqual(deps[0], { path: 'mylib', tokens: ['*'] });
   });
 
   it('handles multiple imports', () => {
@@ -91,7 +91,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['foo', ['default']]);
+    assert.deepEqual(deps[0], { path: 'foo', tokens: ['default'] });
   });
 
   it('handles dynamic imports', () => {
@@ -105,7 +105,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['foo', ['*']]);
+    assert.deepEqual(deps[0], { path: 'foo', tokens: ['*'] });
   });
 
   it('handles async imports', () => {
@@ -119,7 +119,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['foo', ['*']]);
+    assert.deepEqual(deps[0], { path: 'foo', tokens: ['*'] });
   });
 
   it('skips async imports when using skipAsyncImports', () => {
@@ -196,7 +196,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['foo', ['*']]);
+    assert.deepEqual(deps[0], { path: 'foo', tokens: ['*'] });
   });
 
   it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
@@ -215,7 +215,7 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['foo', ['Foo']]);
+    assert.deepEqual(deps[0], { path: 'foo', tokens: ['Foo'] });
   });
 
   it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
@@ -235,6 +235,6 @@ describe('detective-typescript', () => {
       tokens: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], ['foobar', ['*']]);
+    assert.deepEqual(deps[0], { path: 'foobar', tokens: ['*'] });
   });
 });
