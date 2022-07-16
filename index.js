@@ -84,11 +84,13 @@ module.exports = (src, options = {}) => {
         if (types.isPlainRequire(node)) {
           const result = extractDependencyFromRequire(node);
           if (result) {
-            dependencies.push(options.tokens ? [result, []] : result);
+            // Can't determine exact tokens for require.
+            dependencies.push(options.tokens ? [result, ['*']] : result);
           }
         } else if (types.isMainScopedRequire(node)) {
           const result = extractDependencyFromMainRequire(node);
-          dependencies.push(options.tokens ? [result, []] : result);
+          // Can't determine exact tokens for require.
+          dependencies.push(options.tokens ? [result, ['*']] : result);
         }
 
         break;

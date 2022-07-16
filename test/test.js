@@ -100,10 +100,26 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
+  it('handles dynamic imports with tokens', () => {
+    const deps = detective('import("foo");', {
+      tokens: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], ['foo', ['*']]);
+  });
+
   it('handles async imports', () => {
     const deps = detective('() => import("foo");');
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
+  });
+
+  it('handles async imports with tokens', () => {
+    const deps = detective('import("foo");', {
+      tokens: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], ['foo', ['*']]);
   });
 
   it('skips async imports when using skipAsyncImports', () => {
@@ -195,5 +211,14 @@ describe('detective-typescript', () => {
     const deps = detective('const foo = require("foobar")', { mixedImports: true });
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foobar');
+  });
+
+  it('supports CJS when mixedImports is true with tokens', () => {
+    const deps = detective('const foo = require("foobar")', {
+      mixedImports: true,
+      tokens: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], ['foobar', ['*']]);
   });
 });
