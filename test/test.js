@@ -37,7 +37,6 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
-
   it('handles imports without identifiers', () => {
     const deps = detective('import "mylib";', {
       identifiers: true
