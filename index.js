@@ -66,12 +66,12 @@ module.exports = (src, options = {}) => {
         break;
       case 'TSExternalModuleReference':
         if (node.expression && node.expression.value) {
-          dependencies.push(options.tokens ? [node.expression.value, []] : node.expression.value);
+          dependencies.push(options.tokens ? [node.expression.value, ['*']] : node.expression.value);
         }
         break;
       case 'TSImportType':
         if (!skipTypeImports && node.parameter.type === 'TSLiteralType') {
-          dependencies.push(options.tokens ? [node.parameter.literal.value, []] : node.parameter.literal.value);
+          dependencies.push(options.tokens ? [node.parameter.literal.value, ['*']] : node.parameter.literal.value);
         }
         break;
       case 'CallExpression':

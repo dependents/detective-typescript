@@ -191,6 +191,14 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
+  it('parses out type annotation imports with tokens', () => {
+    const deps = detective('const x: typeof import("foo") = 0;', {
+      tokens: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], ['foo', ['*']]);
+  });
+
   it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
     const deps = detective('const x: typeof import("foo") = 0;', {skipTypeImports: true});
     assert.equal(deps.length,  0);
@@ -200,6 +208,14 @@ describe('detective-typescript', () => {
     const deps = detective('import type { Foo } from "foo"');
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
+  });
+
+  it('parses out TypeScript >=3.8 type imports with tokens', () => {
+    const deps = detective('import type { Foo } from "foo"', {
+      tokens: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], ['foo', ['Foo']]);
   });
 
   it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
