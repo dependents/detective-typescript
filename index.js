@@ -34,10 +34,10 @@ module.exports = (src, options = {}) => {
     switch (node.type) {
       case 'ImportExpression':
         if (!options.skipAsyncImports && node.source && node.source.value) {
-          // Can't determine exact tokens for async imports.
-          dependencies.push(options.tokens ? {
+          // Can't determine exact identifiers for async imports.
+          dependencies.push(options.identifiers ? {
             path: node.source.value,
-            tokens: ['*']
+            identifiers: ['*']
           } : node.source.value);
         }
         break;
@@ -46,9 +46,9 @@ module.exports = (src, options = {}) => {
           break;
         }
         if (node.source && node.source.value) {
-          dependencies.push(options.tokens ? {
+          dependencies.push(options.identifiers ? {
             path: node.source.value,
-            tokens: node.specifiers.map(specifier =>
+            identifiers: node.specifiers.map(specifier =>
               specifier.type === 'ImportDefaultSpecifier' ? 'default' : specifier.imported.name
             )
           } : node.source.value);
@@ -56,34 +56,34 @@ module.exports = (src, options = {}) => {
         break;
       case 'ExportNamedDeclaration':
         if (node.source && node.source.value) {
-          dependencies.push(options.tokens ? {
+          dependencies.push(options.identifiers ? {
             path: node.source.value,
-            tokens: node.specifiers.map(specifier => specifier.exported.name)
+            identifiers: node.specifiers.map(specifier => specifier.exported.name)
           } : node.source.value);
         }
         break;
       case 'ExportAllDeclaration':
         if (node.source && node.source.value) {
-          // Can't determine exact tokens for re-exports.
-          dependencies.push(options.tokens ? {
+          // Can't determine exact identifiers for re-exports.
+          dependencies.push(options.identifiers ? {
             path: node.source.value,
-            tokens: ['*']
+            identifiers: ['*']
           } : node.source.value);
         }
         break;
       case 'TSExternalModuleReference':
         if (node.expression && node.expression.value) {
-          dependencies.push(options.tokens ? {
+          dependencies.push(options.identifiers ? {
             path: node.expression.value,
-            tokens: ['*']
+            identifiers: ['*']
           } : node.expression.value);
         }
         break;
       case 'TSImportType':
         if (!skipTypeImports && node.parameter.type === 'TSLiteralType') {
-          dependencies.push(options.tokens ? {
+          dependencies.push(options.identifiers ? {
             path: node.parameter.literal.value,
-            tokens: ['*']
+            identifiers: ['*']
           } : node.parameter.literal.value);
         }
         break;
@@ -97,18 +97,18 @@ module.exports = (src, options = {}) => {
         if (types.isPlainRequire(node)) {
           const result = extractDependencyFromRequire(node);
           if (result) {
-            // Can't determine exact tokens for require.
-            dependencies.push(options.tokens ? {
+            // Can't determine exact identifiers for require.
+            dependencies.push(options.identifiers ? {
               path: result,
-              tokens: ['*']
+              identifiers: ['*']
             } : result);
           }
         } else if (types.isMainScopedRequire(node)) {
           const result = extractDependencyFromMainRequire(node);
-          // Can't determine exact tokens for require.
-          dependencies.push(options.tokens ? {
+          // Can't determine exact identifiers for require.
+          dependencies.push(options.identifiers ? {
             path: result,
-            tokens: ['*']
+            identifiers: ['*']
           } : result);
         }
 

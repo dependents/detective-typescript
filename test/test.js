@@ -37,12 +37,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
-  it('retrieves the dependencies of modules with tokens', () => {
+  it('retrieves the dependencies of modules with identifiers', () => {
     const deps = detective('import {foo, bar} from "mylib";', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'mylib', tokens: ['foo', 'bar'] });
+    assert.deepEqual(deps[0], { path: 'mylib', identifiers: ['foo', 'bar'] });
   });
 
   it('retrieves the re-export dependencies of modules', () => {
@@ -51,12 +51,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
-  it('retrieves the re-export dependencies of modules with tokens', () => {
+  it('retrieves the re-export dependencies of modules with identifiers', () => {
     const deps = detective('export {foo, bar} from "mylib";', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'mylib', tokens: ['foo', 'bar'] });
+    assert.deepEqual(deps[0], { path: 'mylib', identifiers: ['foo', 'bar'] });
   });
 
   it('retrieves the re-export * dependencies of modules', () => {
@@ -65,12 +65,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
-  it('retrieves the re-export * dependencies of modules with tokens', () => {
+  it('retrieves the re-export * dependencies of modules with identifiers', () => {
     const deps = detective('export * from "mylib";', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'mylib', tokens: ['*'] });
+    assert.deepEqual(deps[0], { path: 'mylib', identifiers: ['*'] });
   });
 
   it('handles multiple imports', () => {
@@ -86,12 +86,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('handles default imports with tokens', () => {
+  it('handles default imports with identifiers', () => {
     const deps = detective('import foo from "foo";', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'foo', tokens: ['default'] });
+    assert.deepEqual(deps[0], { path: 'foo', identifiers: ['default'] });
   });
 
   it('handles dynamic imports', () => {
@@ -100,12 +100,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('handles dynamic imports with tokens', () => {
+  it('handles dynamic imports with identifiers', () => {
     const deps = detective('import("foo");', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'foo', tokens: ['*'] });
+    assert.deepEqual(deps[0], { path: 'foo', identifiers: ['*'] });
   });
 
   it('handles async imports', () => {
@@ -114,12 +114,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('handles async imports with tokens', () => {
+  it('handles async imports with identifiers', () => {
     const deps = detective('import("foo");', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'foo', tokens: ['*'] });
+    assert.deepEqual(deps[0], { path: 'foo', identifiers: ['*'] });
   });
 
   it('skips async imports when using skipAsyncImports', () => {
@@ -191,12 +191,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('parses out type annotation imports with tokens', () => {
+  it('parses out type annotation imports with identifiers', () => {
     const deps = detective('const x: typeof import("foo") = 0;', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'foo', tokens: ['*'] });
+    assert.deepEqual(deps[0], { path: 'foo', identifiers: ['*'] });
   });
 
   it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
@@ -210,12 +210,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('parses out TypeScript >=3.8 type imports with tokens', () => {
+  it('parses out TypeScript >=3.8 type imports with identifiers', () => {
     const deps = detective('import type { Foo } from "foo"', {
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'foo', tokens: ['Foo'] });
+    assert.deepEqual(deps[0], { path: 'foo', identifiers: ['Foo'] });
   });
 
   it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
@@ -229,12 +229,12 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foobar');
   });
 
-  it('supports CJS when mixedImports is true with tokens', () => {
+  it('supports CJS when mixedImports is true with identifiers', () => {
     const deps = detective('const foo = require("foobar")', {
       mixedImports: true,
-      tokens: true
+      identifiers: true
     });
     assert.equal(deps.length, 1);
-    assert.deepEqual(deps[0], { path: 'foobar', tokens: ['*'] });
+    assert.deepEqual(deps[0], { path: 'foobar', identifiers: ['*'] });
   });
 });
