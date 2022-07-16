@@ -81,11 +81,10 @@ module.exports = (src, options = {}) => {
         break;
       case 'TSImportType':
         if (!skipTypeImports && node.parameter.type === 'TSLiteralType') {
-          dependencies.push(options.tokens ?
-            {
-              path: node.parameter.literal.value,
-              tokens: ['*']
-            } : node.parameter.literal.value);
+          dependencies.push(options.tokens ? {
+            path: node.parameter.literal.value,
+            tokens: ['*']
+          } : node.parameter.literal.value);
         }
         break;
       case 'CallExpression':
