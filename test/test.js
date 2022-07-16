@@ -31,6 +31,21 @@ describe('detective-typescript', () => {
     assert.equal(deps.length, 0);
   });
 
+  it('handles imports without identifiers', () => {
+    const deps = detective('import "mylib";');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'mylib');
+  });
+
+
+  it('handles imports without identifiers', () => {
+    const deps = detective('import "mylib";', {
+      identifiers: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], { path: 'mylib', identifiers: [] });
+  });
+
   it('retrieves the dependencies of modules', () => {
     const deps = detective('import {foo, bar} from "mylib";');
     assert.equal(deps.length, 1);
