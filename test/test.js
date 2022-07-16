@@ -31,13 +31,13 @@ describe('detective-typescript', () => {
     assert.equal(deps.length, 0);
   });
 
-  it('handles imports without identifiers', () => {
+  it('handles identifier-free imports', () => {
     const deps = detective('import "mylib";');
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'mylib');
   });
 
-  it('handles imports without identifiers', () => {
+  it('handles identifier-free imports asking for identifiers', () => {
     const deps = detective('import "mylib";', {
       identifiers: true
     });
