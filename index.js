@@ -34,7 +34,8 @@ module.exports = (src, options = {}) => {
     switch (node.type) {
       case 'ImportExpression':
         if (!options.skipAsyncImports && node.source && node.source.value) {
-          dependencies.push(node.source.value);
+          // Can't determine exact tokens for async imports.
+          dependencies.push(options.tokens ? [node.source.value, ['*']] : node.source.value);
         }
         break;
       case 'ImportDeclaration':
@@ -42,23 +43,33 @@ module.exports = (src, options = {}) => {
           break;
         }
         if (node.source && node.source.value) {
-          dependencies.push(node.source.value);
+          dependencies.push(options.tokens ? [
+            node.source.value,
+            node.specifiers.map(specifier => specifier.imported.name)
+          ] : node.source.value);
         }
         break;
       case 'ExportNamedDeclaration':
+        if (node.source && node.source.value) {
+          dependencies.push(options.tokens ? [node.source.value,
+            node.specifiers.map(specifier => specifier.exported.name)
+          ] : node.source.value);
+        }
+        break;
       case 'ExportAllDeclaration':
         if (node.source && node.source.value) {
-          dependencies.push(node.source.value);
+          // Can't determine exact tokens for re-exports.
+          dependencies.push(options.tokens ? [node.source.value, ['*']] : node.source.value);
         }
         break;
       case 'TSExternalModuleReference':
         if (node.expression && node.expression.value) {
-          dependencies.push(node.expression.value);
+          dependencies.push(options.tokens ? [node.expression.value, []] : node.expression.value);
         }
         break;
       case 'TSImportType':
         if (!skipTypeImports && node.parameter.type === 'TSLiteralType') {
-          dependencies.push(node.parameter.literal.value);
+          dependencies.push(options.tokens ? [node.parameter.literal.value, []] : node.parameter.literal.value);
         }
         break;
       case 'CallExpression':
@@ -71,10 +82,11 @@ module.exports = (src, options = {}) => {
         if (types.isPlainRequire(node)) {
           const result = extractDependencyFromRequire(node);
           if (result) {
-            dependencies.push(result);
+            dependencies.push(options.tokens ? [result, []] : result);
           }
         } else if (types.isMainScopedRequire(node)) {
-          dependencies.push(extractDependencyFromMainRequire(node));
+          const result = extractDependencyFromMainRequire(node);
+          dependencies.push(options.tokens ? [result, []] : result);
         }
 
         break;
