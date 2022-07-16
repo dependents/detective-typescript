@@ -51,7 +51,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
-  it('retrieves the dependencies of modules with identifiers', () => {
+  it('retrieves the dependencies of modules asking for identifiers', () => {
     const deps = detective('import {foo, bar} from "mylib";', {
       identifiers: true
     });
@@ -65,7 +65,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
-  it('retrieves the re-export dependencies of modules with identifiers', () => {
+  it('retrieves the re-export dependencies of modules asking for identifiers', () => {
     const deps = detective('export {foo, bar} from "mylib";', {
       identifiers: true
     });
@@ -79,7 +79,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
-  it('retrieves the re-export * dependencies of modules with identifiers', () => {
+  it('retrieves the re-export * dependencies of modules asking for identifiers', () => {
     const deps = detective('export * from "mylib";', {
       identifiers: true
     });
@@ -100,7 +100,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('handles default imports with identifiers', () => {
+  it('handles default imports asking for identifiers', () => {
     const deps = detective('import foo from "foo";', {
       identifiers: true
     });
@@ -114,7 +114,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('handles dynamic imports with identifiers', () => {
+  it('handles dynamic imports asking for identifiers', () => {
     const deps = detective('import("foo");', {
       identifiers: true
     });
@@ -128,7 +128,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('handles async imports with identifiers', () => {
+  it('handles async imports asking for identifiers', () => {
     const deps = detective('import("foo");', {
       identifiers: true
     });
@@ -205,7 +205,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('parses out type annotation imports with identifiers', () => {
+  it('parses out type annotation imports asking for identifiers', () => {
     const deps = detective('const x: typeof import("foo") = 0;', {
       identifiers: true
     });
@@ -224,7 +224,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foo');
   });
 
-  it('parses out TypeScript >=3.8 type imports with identifiers', () => {
+  it('parses out TypeScript >=3.8 type imports asking for identifiers', () => {
     const deps = detective('import type { Foo } from "foo"', {
       identifiers: true
     });
@@ -243,7 +243,7 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'foobar');
   });
 
-  it('supports CJS when mixedImports is true with identifiers', () => {
+  it('supports CJS when mixedImports is true asking for identifiers', () => {
     const deps = detective('const foo = require("foobar")', {
       mixedImports: true,
       identifiers: true
