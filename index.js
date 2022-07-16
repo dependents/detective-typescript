@@ -45,7 +45,9 @@ module.exports = (src, options = {}) => {
         if (node.source && node.source.value) {
           dependencies.push(options.tokens ? [
             node.source.value,
-            node.specifiers.map(specifier => specifier.imported.name)
+            node.specifiers.map(specifier =>
+              specifier.type === 'ImportDefaultSpecifier' ? 'default' : specifier.imported.name
+            )
           ] : node.source.value);
         }
         break;

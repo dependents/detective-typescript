@@ -65,6 +65,14 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
+  it('retrieves the re-export * dependencies of modules with tokens', () => {
+    const deps = detective('export * from "mylib";', {
+      tokens: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], ['mylib', ['*']]);
+  });
+
   it('handles multiple imports', () => {
     const deps = detective('import {foo, bar} from "mylib";\nimport "mylib2"');
     assert.equal(deps.length,  2);
@@ -76,6 +84,14 @@ describe('detective-typescript', () => {
     const deps = detective('import foo from "foo";');
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
+  });
+
+  it('handles default imports with tokens', () => {
+    const deps = detective('import foo from "foo";', {
+      tokens: true
+    });
+    assert.equal(deps.length, 1);
+    assert.deepEqual(deps[0], ['foo', ['default']]);
   });
 
   it('handles dynamic imports', () => {
