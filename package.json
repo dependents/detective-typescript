@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "lint": "eslint index.js test/test.js",
+    "fix": "npm run lint -- --fix",
     "mocha": "mocha",
     "test": "npm run lint && npm run mocha",
     "test:ci": "c8 npm run mocha",
