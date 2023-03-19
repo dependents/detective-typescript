@@ -34,8 +34,8 @@
   "homepage": "https://github.com/dependents/detective-typescript",
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^5.55.0",
-    "ast-module-types": "^3.0.0",
-    "node-source-walk": "^5.0.0",
+    "ast-module-types": "^4.0.0",
+    "node-source-walk": "^5.0.1",
     "typescript": "^4.9.5"
   },
   "devDependencies": {
