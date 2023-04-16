@@ -1,4 +1,4 @@
-name: CI
+name: Lint
 
 on:
   push:
@@ -7,16 +7,11 @@ on:
 
 env:
   FORCE_COLOR: 2
+  NODE: 18
 
 jobs:
-  test:
-    name: Node ${{ matrix.node }}
+  lint:
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [12, 14, 16, 18]
 
     steps:
       - name: Clone repository
@@ -27,11 +22,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ env.NODE }}
           cache: npm
 
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Run unit tests
-        run: npm run test:ci
+      - name: Lint
+        run: npm run lint
