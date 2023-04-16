@@ -78,7 +78,6 @@ describe('detective-typescript', () => {
     assert.equal(onAfterFileCalledArgs[0].options.onAfterFile, onAfterFile);
   });
 
-
   it('retrieves the re-export dependencies of modules', () => {
     const deps = detective('export {foo, bar} from "mylib";');
     assert.equal(deps.length, 1);
