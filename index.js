@@ -91,7 +91,6 @@ module.exports = (src, options = {}) => {
     }
   });
 
-
   if (options.onAfterFile) {
     options.onAfterFile({ options, src, ast, walker, dependencies });
   }
