@@ -119,6 +119,34 @@ describe('detective-typescript', () => {
     });
   });
 
+  it('parses out type annotation imports', () => {
+    const deps = detective('const x: typeof import("foo") = 0;');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foo');
+  });
+
+  it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
+    const deps = detective('const x: typeof import("foo") = 0;', { skipTypeImports: true });
+    assert.equal(deps.length,  0);
+  });
+
+  it('parses out TypeScript >=3.8 type imports', () => {
+    const deps = detective('import type { Foo } from "foo"');
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foo');
+  });
+
+  it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
+    const deps = detective('import type { Foo } from "foo"', { skipTypeImports: true });
+    assert.equal(deps.length,  0);
+  });
+
+  it('supports CJS when mixedImports is true', () => {
+    const deps = detective('const foo = require("foobar")', { mixedImports: true });
+    assert.equal(deps.length, 1);
+    assert.equal(deps[0], 'foobar');
+  });
+
   describe('tsx', () => {
     it('does not throw when given no options', () => {
       assert.doesNotThrow(() => {
@@ -135,33 +163,5 @@ describe('detective-typescript', () => {
       const results = detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`);
       assert.equal(results[0], 'Foo');
     });
-  });
-
-  it('parses out type annotation imports', () => {
-    const deps = detective('const x: typeof import("foo") = 0;');
-    assert.equal(deps.length, 1);
-    assert.equal(deps[0], 'foo');
-  });
-
-  it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
-    const deps = detective('const x: typeof import("foo") = 0;', {skipTypeImports: true});
-    assert.equal(deps.length,  0);
-  });
-
-  it('parses out TypeScript >=3.8 type imports', () => {
-    const deps = detective('import type { Foo } from "foo"');
-    assert.equal(deps.length, 1);
-    assert.equal(deps[0], 'foo');
-  });
-
-  it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
-    const deps = detective('import type { Foo } from "foo"', {skipTypeImports: true});
-    assert.equal(deps.length,  0);
-  });
-
-  it('supports CJS when mixedImports is true', () => {
-    const deps = detective('const foo = require("foobar")', { mixedImports: true });
-    assert.equal(deps.length, 1);
-    assert.equal(deps[0], 'foobar');
   });
 });
