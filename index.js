@@ -11,6 +11,9 @@ const types = require('ast-module-types');
  * @return {String[]}
  */
 module.exports = (src, options = {}) => {
+  if (src === undefined) throw new Error('src not given');
+  if (src === '') return [];
+
   const walkerOptions = { ...options, parser: Parser };
 
   // Determine whether to skip "type-only" imports
@@ -23,12 +26,8 @@ module.exports = (src, options = {}) => {
   const mixedImports = Boolean(options.mixedImports);
   delete walkerOptions.mixedImports;
 
-  const dependencies = [];
-
-  if (typeof src === 'undefined') throw new Error('src not given');
-  if (src === '') return dependencies;
-
   const walker = new Walker(walkerOptions);
+  const dependencies = [];
 
   walker.walk(src, (node) => {
     switch (node.type) {
@@ -86,7 +85,7 @@ module.exports = (src, options = {}) => {
   return dependencies;
 };
 
-module.exports.tsx = (src, options) => {
+module.exports.tsx = (src, options = {}) => {
   return module.exports(src, { ...options, jsx: true });
 };
 
