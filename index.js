@@ -1,8 +1,8 @@
 'use strict';
 
-const Parser = require('@typescript-eslint/typescript-estree');
-const Walker = require('node-source-walk');
+const parser = require('@typescript-eslint/typescript-estree');
 const types = require('ast-module-types');
+const Walker = require('node-source-walk');
 
 /**
  * Extracts the dependencies of the supplied TypeScript module
@@ -14,7 +14,7 @@ module.exports = (src, options = {}) => {
   if (src === undefined) throw new Error('src not given');
   if (src === '') return [];
 
-  const walkerOptions = { ...options, parser: Parser };
+  const walkerOptions = { ...options, parser };
 
   // Determine whether to skip "type-only" imports
   // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types
@@ -63,7 +63,7 @@ module.exports = (src, options = {}) => {
       case 'CallExpression':
         if (!mixedImports || !types.isRequire(node) ||
             !node.arguments ||
-            !node.arguments.length) {
+            node.arguments.length === 0) {
           break;
         }
 
