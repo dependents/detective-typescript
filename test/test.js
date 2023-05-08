@@ -98,7 +98,7 @@ describe('detective-typescript', () => {
   it('throws when content is not provided', () => {
     assert.throws(() => {
       detective();
-    }, Error, 'src not given');
+    }, /^Error: src not given$/);
   });
 
   it('does not throw with angle bracket type assertions in a module', () => {
