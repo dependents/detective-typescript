@@ -1,4 +1,8 @@
-### detective-typescript [![CI](https://img.shields.io/github/actions/workflow/status/dependents/detective-typescript/ci.yml?branch=main&label=CI&logo=github)](https://github.com/dependents/detective-typescript/actions/workflows/ci.yml?query=branch%3Amain) [![npm](https://img.shields.io/npm/v/detective-typescript)](https://www.npmjs.com/package/detective-typescript) [![npm](https://img.shields.io/npm/dm/detective-typescript)](https://www.npmjs.com/package/detective-typescript)
+# detective-typescript
+
+[![CI](https://img.shields.io/github/actions/workflow/status/dependents/detective-typescript/ci.yml?branch=main&label=CI&logo=github)](https://github.com/dependents/detective-typescript/actions/workflows/ci.yml?query=branch%3Amain)
+[![npm version](https://img.shields.io/npm/v/detective-typescript?logo=npm&logoColor=fff)](https://www.npmjs.com/package/detective-typescript)
+[![npm downloads](https://img.shields.io/npm/dm/detective-typescript)](https://www.npmjs.com/package/detective-typescript)
 
 > Get the dependencies of TypeScript module
 
@@ -6,7 +10,7 @@
 npm install detective-typescript
 ```
 
-### Usage
+## Usage
 
 ```js
 const fs = require('fs');
@@ -18,13 +22,13 @@ const mySourceCode = fs.readFileSync('myfile.ts', 'utf8');
 const dependencies = detective(mySourceCode);
 ```
 
-### Options
+## Options
 
 - `skipTypeImports` (default: `false`) Skips imports that only imports types
 - `mixedImports`: (default: `false`) Include CJS imports in dependency list
 - `skipAsyncImports`: (default: `false`) Whether or not to omit async imports (import('foo'))
 - `jsx`: (default: `false`) Enable parsing of JSX
 
-#### License
+## License
 
 MIT
