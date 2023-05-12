@@ -29,38 +29,54 @@ module.exports = (src, options = {}) => {
   const walker = new Walker(walkerOptions);
   const dependencies = [];
 
-  walker.walk(src, (node) => {
+  walker.walk(src, node => {
     switch (node.type) {
-      case 'ImportExpression':
+      case 'ImportExpression': {
         if (!options.skipAsyncImports && node.source?.value) {
           dependencies.push(node.source.value);
         }
+
         break;
-      case 'ImportDeclaration':
+      }
+
+      case 'ImportDeclaration': {
         if (skipTypeImports && node.importKind === 'type') {
           break;
         }
+
         if (node.source?.value) {
           dependencies.push(node.source.value);
         }
+
         break;
+      }
+
       case 'ExportNamedDeclaration':
-      case 'ExportAllDeclaration':
+      case 'ExportAllDeclaration': {
         if (node.source?.value) {
           dependencies.push(node.source.value);
         }
+
         break;
-      case 'TSExternalModuleReference':
+      }
+
+      case 'TSExternalModuleReference': {
         if (node.expression?.value) {
           dependencies.push(node.expression.value);
         }
+
         break;
-      case 'TSImportType':
+      }
+
+      case 'TSImportType': {
         if (!skipTypeImports && node.parameter.type === 'TSLiteralType') {
           dependencies.push(node.parameter.literal.value);
         }
+
         break;
-      case 'CallExpression':
+      }
+
+      case 'CallExpression': {
         if (!mixedImports || !types.isRequire(node) ||
             !node.arguments ||
             node.arguments.length === 0) {
@@ -77,6 +93,8 @@ module.exports = (src, options = {}) => {
         }
 
         break;
+      }
+
       default:
         // nothing
     }

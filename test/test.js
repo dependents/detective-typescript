@@ -51,7 +51,7 @@ describe('detective-typescript', () => {
 
   it('handles multiple imports', () => {
     const deps = detective('import {foo, bar} from "mylib";\nimport "mylib2"');
-    assert.equal(deps.length,  2);
+    assert.equal(deps.length, 2);
     assert.equal(deps[0], 'mylib');
     assert.equal(deps[1], 'mylib2');
   });
@@ -76,7 +76,7 @@ describe('detective-typescript', () => {
 
   it('skips async imports when using skipAsyncImports', () => {
     const deps = detective('() => import("foo");', { skipAsyncImports: true });
-    assert.equal(deps.length,  0);
+    assert.equal(deps.length, 0);
   });
 
   it('retrieves dependencies from modules using "export ="', () => {
@@ -103,19 +103,19 @@ describe('detective-typescript', () => {
 
   it('does not throw with angle bracket type assertions in a module', () => {
     assert.doesNotThrow(() => {
-      detective(`import foo from 'foo'; var baz = <baz>bar;`);
+      detective('import foo from "foo"; var baz = <baz>bar;');
     });
   });
 
   it('throws with JSX in a module and !parserOptions.jsx', () => {
     assert.throws(() => {
-      detective(`import Foo from 'Foo'; var foo = <Foo/>`);
+      detective('import Foo from "Foo"; var foo = <Foo/>');
     });
   });
 
   it('does not throw with JSX in a module and parserOptions.jsx', () => {
     assert.doesNotThrow(() => {
-      detective(`import Foo from 'Foo'; var foo = <Foo/>`, { jsx: true });
+      detective('import Foo from "Foo"; var foo = <Foo/>', { jsx: true });
     });
   });
 
@@ -127,7 +127,7 @@ describe('detective-typescript', () => {
 
   it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
     const deps = detective('const x: typeof import("foo") = 0;', { skipTypeImports: true });
-    assert.equal(deps.length,  0);
+    assert.equal(deps.length, 0);
   });
 
   it('parses out TypeScript >=3.8 type imports', () => {
@@ -138,7 +138,7 @@ describe('detective-typescript', () => {
 
   it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
     const deps = detective('import type { Foo } from "foo"', { skipTypeImports: true });
-    assert.equal(deps.length,  0);
+    assert.equal(deps.length, 0);
   });
 
   it('supports CJS when mixedImports is true', () => {
@@ -150,17 +150,17 @@ describe('detective-typescript', () => {
   describe('tsx', () => {
     it('does not throw when given no options', () => {
       assert.doesNotThrow(() => {
-        detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`);
+        detective.tsx('import Foo from "Foo"; var foo = <Foo/>');
       });
     });
 
     it('returns the import of a tsx file when using option', () => {
-      const results = detective(`import Foo from 'Foo'; var foo = <Foo/>`, { jsx: true });
+      const results = detective('import Foo from "Foo"; var foo = <Foo/>', { jsx: true });
       assert.equal(results[0], 'Foo');
     });
 
     it('returns the import of a tsx file when using API call', () => {
-      const results = detective.tsx(`import Foo from 'Foo'; var foo = <Foo/>`);
+      const results = detective.tsx('import Foo from "Foo"; var foo = <Foo/>');
       assert.equal(results[0], 'Foo');
     });
   });

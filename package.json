@@ -8,8 +8,8 @@
     "index.js"
   ],
   "scripts": {
-    "lint": "eslint index.js test/test.js",
-    "fix": "npm run lint -- --fix",
+    "lint": "xo",
+    "fix": "xo --fix",
     "mocha": "mocha",
     "test": "npm run lint && npm run mocha",
     "test:ci": "c8 npm run mocha",
@@ -40,7 +40,43 @@
   },
   "devDependencies": {
     "c8": "^7.13.0",
-    "eslint": "^8.40.0",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "xo": "^0.54.2"
+  },
+  "xo": {
+    "space": true,
+    "ignores": [
+      "index.d.ts",
+      "test/fixtures/*"
+    ],
+    "rules": {
+      "arrow-body-style": "off",
+      "capitalized-comments": "off",
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
+      "curly": [
+        "error",
+        "multi-line"
+      ],
+      "operator-linebreak": [
+        "error",
+        "after"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "prefer-template": "error",
+      "space-before-function-paren": [
+        "error",
+        "never"
+      ],
+      "unicorn/prefer-module": "off",
+      "unicorn/prefer-node-protocol": "off",
+      "unicorn/prefer-top-level-await": "off",
+      "unicorn/prevent-abbreviations": "off"
+    }
   }
 }
