@@ -28,7 +28,7 @@ const dependencies = detective(mySourceCode);
 - `mixedImports`: (default: `false`) Include CJS imports in dependency list
 - `skipAsyncImports`: (default: `false`) Whether or not to omit async imports (import('foo'))
 - `jsx`: (default: `false`) Enable parsing of JSX
-- `onFile`: A callback that will be called before the file is processed. Intended for use with [`dependency-tree`](https://github.com/dependents/node-dependency-tree). Passed an object argument with properties `options` (echoing any options passed in, e.g., by [`precinct`](https://github.com/dependents/node-precinct)), `src` (source code for file as string), `ast` (parsed AST object for the file source), and `walker` (a `Walker` instance from [`source-walk`](https://github.com/dependents/node-source-walk) configured for TypeScript to which you can pass the `ast` or `src`).
+- `onFile`: A callback that will be called before the file is processed. Intended for use with [`dependency-tree`](https://github.com/dependents/node-dependency-tree). Passed an object argument with properties `options` (echoing any options passed in, e.g., by [`precinct`](https://github.com/dependents/node-precinct)), `src` (source code for file as string), `ast` (parsed AST object for the file source), and `walker` (a `Walker` instance from [`node-source-walk`](https://github.com/dependents/node-source-walk) configured for TypeScript to which you can pass the `ast` or `src`).
 - `onAfterFile`: Similar to `onFile`, but the callback is also passed an object property `dependencies`, a string array with the extracted dependencies.
 
 ## License
