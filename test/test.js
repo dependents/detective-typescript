@@ -37,6 +37,47 @@ describe('detective-typescript', () => {
     assert.equal(deps[0], 'mylib');
   });
 
+  it('calls onFile callback', () => {
+    let onFileCalledArgs;
+    const onFile = (...args) => {
+      onFileCalledArgs = args;
+    };
+
+    const src = 'import {foo, bar} from "mylib";';
+
+    detective(src, { onFile });
+
+    assert.ok(onFileCalledArgs);
+    assert.ok(onFileCalledArgs[0]);
+    assert.equal(onFileCalledArgs[0].src, src);
+    assert.ok(typeof onFileCalledArgs[0].ast === 'object');
+    assert.ok(typeof onFileCalledArgs[0].walker === 'object');
+
+    assert.ok(typeof onFileCalledArgs[0].options === 'object');
+    assert.equal(onFileCalledArgs[0].options.onFile, onFile);
+  });
+
+  it('calls onAfterFile callback', () => {
+    let onAfterFileCalledArgs;
+    const onAfterFile = (...args) => {
+      onAfterFileCalledArgs = args;
+    };
+
+    const src = 'import {foo, bar} from "mylib";';
+
+    detective(src, { onAfterFile });
+
+    assert.ok(onAfterFileCalledArgs);
+    assert.ok(onAfterFileCalledArgs[0]);
+    assert.equal(onAfterFileCalledArgs[0].src, src);
+    assert.ok(typeof onAfterFileCalledArgs[0].ast === 'object');
+    assert.ok(typeof onAfterFileCalledArgs[0].walker === 'object');
+    assert.ok(Array.isArray(onAfterFileCalledArgs[0].dependencies));
+
+    assert.ok(typeof onAfterFileCalledArgs[0].options === 'object');
+    assert.equal(onAfterFileCalledArgs[0].options.onAfterFile, onAfterFile);
+  });
+
   it('retrieves the re-export dependencies of modules', () => {
     const deps = detective('export {foo, bar} from "mylib";');
     assert.equal(deps.length, 1);

@@ -29,6 +29,14 @@ module.exports = (src, options = {}) => {
   const walker = new Walker(walkerOptions);
   const dependencies = [];
 
+  // Pre-parse the source to get the AST to pass to `onFile`,
+  // then reuse that AST below in our walker walk.
+  const ast = typeof src === 'string' ? walker.parse(src) : src;
+
+  if (options.onFile) {
+    options.onFile({ options, src, ast, walker });
+  }
+
   walker.walk(src, node => {
     switch (node.type) {
       case 'ImportExpression': {
@@ -99,6 +107,10 @@ module.exports = (src, options = {}) => {
         // nothing
     }
   });
+
+  if (options.onAfterFile) {
+    options.onAfterFile({ options, src, ast, walker, dependencies });
+  }
 
   return dependencies;
 };
