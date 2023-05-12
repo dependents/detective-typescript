@@ -120,7 +120,7 @@ module.exports.tsx = (src, options = {}) => {
 };
 
 function extractDependencyFromRequire(node) {
-  if (node.arguments[0].type === 'Literal' || node.arguments[0].type === 'StringLiteral') {
+  if (['Literal', 'StringLiteral'].includes(node.arguments[0].type)) {
     return node.arguments[0].value;
   }
 
