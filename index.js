@@ -32,7 +32,7 @@ module.exports = (src, options = {}) => {
   walker.walk(src, (node) => {
     switch (node.type) {
       case 'ImportExpression':
-        if (!options.skipAsyncImports && node.source && node.source.value) {
+        if (!options.skipAsyncImports && node.source?.value) {
           dependencies.push(node.source.value);
         }
         break;
@@ -40,18 +40,18 @@ module.exports = (src, options = {}) => {
         if (skipTypeImports && node.importKind === 'type') {
           break;
         }
-        if (node.source && node.source.value) {
+        if (node.source?.value) {
           dependencies.push(node.source.value);
         }
         break;
       case 'ExportNamedDeclaration':
       case 'ExportAllDeclaration':
-        if (node.source && node.source.value) {
+        if (node.source?.value) {
           dependencies.push(node.source.value);
         }
         break;
       case 'TSExternalModuleReference':
-        if (node.expression && node.expression.value) {
+        if (node.expression?.value) {
           dependencies.push(node.expression.value);
         }
         break;
