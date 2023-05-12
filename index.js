@@ -1,8 +1,8 @@
 'use strict';
 
-const Parser = require('@typescript-eslint/typescript-estree');
-const Walker = require('node-source-walk');
+const parser = require('@typescript-eslint/typescript-estree');
 const types = require('ast-module-types');
+const Walker = require('node-source-walk');
 
 /**
  * Extracts the dependencies of the supplied TypeScript module
@@ -11,7 +11,10 @@ const types = require('ast-module-types');
  * @return {String[]}
  */
 module.exports = (src, options = {}) => {
-  const walkerOptions = { ...options, parser: Parser };
+  if (src === undefined) throw new Error('src not given');
+  if (src === '') return [];
+
+  const walkerOptions = { ...options, parser };
 
   // Determine whether to skip "type-only" imports
   // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types
@@ -23,12 +26,8 @@ module.exports = (src, options = {}) => {
   const mixedImports = Boolean(options.mixedImports);
   delete walkerOptions.mixedImports;
 
-  const dependencies = [];
-
-  if (typeof src === 'undefined') throw new Error('src not given');
-  if (src === '') return dependencies;
-
   const walker = new Walker(walkerOptions);
+  const dependencies = [];
 
   // Pre-parse the source to get the AST to pass to `onFile`,
   // then reuse that AST below in our walker walk.
@@ -38,41 +37,57 @@ module.exports = (src, options = {}) => {
     options.onFile({ options, src, ast, walker });
   }
 
-  walker.walk(ast, (node) => {
+  walker.walk(src, node => {
     switch (node.type) {
-      case 'ImportExpression':
-        if (!options.skipAsyncImports && node.source && node.source.value) {
+      case 'ImportExpression': {
+        if (!options.skipAsyncImports && node.source?.value) {
           dependencies.push(node.source.value);
         }
+
         break;
-      case 'ImportDeclaration':
+      }
+
+      case 'ImportDeclaration': {
         if (skipTypeImports && node.importKind === 'type') {
           break;
         }
-        if (node.source && node.source.value) {
+
+        if (node.source?.value) {
           dependencies.push(node.source.value);
         }
+
         break;
+      }
+
       case 'ExportNamedDeclaration':
-      case 'ExportAllDeclaration':
-        if (node.source && node.source.value) {
+      case 'ExportAllDeclaration': {
+        if (node.source?.value) {
           dependencies.push(node.source.value);
         }
+
         break;
-      case 'TSExternalModuleReference':
-        if (node.expression && node.expression.value) {
+      }
+
+      case 'TSExternalModuleReference': {
+        if (node.expression?.value) {
           dependencies.push(node.expression.value);
         }
+
         break;
-      case 'TSImportType':
+      }
+
+      case 'TSImportType': {
         if (!skipTypeImports && node.parameter.type === 'TSLiteralType') {
           dependencies.push(node.parameter.literal.value);
         }
+
         break;
-      case 'CallExpression':
+      }
+
+      case 'CallExpression': {
         if (!mixedImports || !types.isRequire(node) ||
             !node.arguments ||
-            !node.arguments.length) {
+            node.arguments.length === 0) {
           break;
         }
 
@@ -86,6 +101,8 @@ module.exports = (src, options = {}) => {
         }
 
         break;
+      }
+
       default:
         // nothing
     }
@@ -98,7 +115,7 @@ module.exports = (src, options = {}) => {
   return dependencies;
 };
 
-module.exports.tsx = (src, options) => {
+module.exports.tsx = (src, options = {}) => {
   return module.exports(src, { ...options, jsx: true });
 };
 
