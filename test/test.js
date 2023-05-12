@@ -41,9 +41,9 @@ describe('detective-typescript', () => {
     let onFileCalledArgs;
     const onFile = (...args) => {
       onFileCalledArgs = args;
-    }
+    };
 
-    const src = 'import {foo, bar} from "mylib";'
+    const src = 'import {foo, bar} from "mylib";';
 
     detective(src, { onFile });
 
@@ -61,9 +61,9 @@ describe('detective-typescript', () => {
     let onAfterFileCalledArgs;
     const onAfterFile = (...args) => {
       onAfterFileCalledArgs = args;
-    }
+    };
 
-    const src = 'import {foo, bar} from "mylib";'
+    const src = 'import {foo, bar} from "mylib";';
 
     detective(src, { onAfterFile });
 
