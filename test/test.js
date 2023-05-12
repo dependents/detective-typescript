@@ -5,134 +5,104 @@
 const assert = require('assert').strict;
 const detective = require('../index.js');
 
-describe('detective-typescript', () => {
-  const ast = {
-    type: 'Program',
-    body: [{
-      type: 'VariableDeclaration',
-      declarations: [{
-        type: 'VariableDeclarator',
-        id: {
-          type: 'Identifier',
-          name: 'x'
-        },
-        init: {
-          type: 'Literal',
-          value: 4,
-          raw: '4'
-        }
-      }],
-      kind: 'let'
-    }]
-  };
+const ast = {
+  type: 'Program',
+  body: [{
+    type: 'VariableDeclaration',
+    declarations: [{
+      type: 'VariableDeclarator',
+      id: {
+        type: 'Identifier',
+        name: 'x'
+      },
+      init: {
+        type: 'Literal',
+        value: 4,
+        raw: '4'
+      }
+    }],
+    kind: 'let'
+  }]
+};
 
+describe('detective-typescript', () => {
   it('accepts an ast', () => {
     const deps = detective(ast);
     assert.equal(deps.length, 0);
   });
 
   it('retrieves the dependencies of modules', () => {
-    const deps = detective('import {foo, bar} from "mylib";');
+    const fixture = 'import {foo, bar} from "mylib";';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'mylib');
   });
 
-  it('calls onFile callback', () => {
-    let onFileCalledArgs;
-    const onFile = (...args) => {
-      onFileCalledArgs = args;
-    };
-
-    const src = 'import {foo, bar} from "mylib";';
-
-    detective(src, { onFile });
-
-    assert.ok(onFileCalledArgs);
-    assert.ok(onFileCalledArgs[0]);
-    assert.equal(onFileCalledArgs[0].src, src);
-    assert.ok(typeof onFileCalledArgs[0].ast === 'object');
-    assert.ok(typeof onFileCalledArgs[0].walker === 'object');
-
-    assert.ok(typeof onFileCalledArgs[0].options === 'object');
-    assert.equal(onFileCalledArgs[0].options.onFile, onFile);
-  });
-
-  it('calls onAfterFile callback', () => {
-    let onAfterFileCalledArgs;
-    const onAfterFile = (...args) => {
-      onAfterFileCalledArgs = args;
-    };
-
-    const src = 'import {foo, bar} from "mylib";';
-
-    detective(src, { onAfterFile });
-
-    assert.ok(onAfterFileCalledArgs);
-    assert.ok(onAfterFileCalledArgs[0]);
-    assert.equal(onAfterFileCalledArgs[0].src, src);
-    assert.ok(typeof onAfterFileCalledArgs[0].ast === 'object');
-    assert.ok(typeof onAfterFileCalledArgs[0].walker === 'object');
-    assert.ok(Array.isArray(onAfterFileCalledArgs[0].dependencies));
-
-    assert.ok(typeof onAfterFileCalledArgs[0].options === 'object');
-    assert.equal(onAfterFileCalledArgs[0].options.onAfterFile, onAfterFile);
-  });
-
   it('retrieves the re-export dependencies of modules', () => {
-    const deps = detective('export {foo, bar} from "mylib";');
+    const fixture = 'export {foo, bar} from "mylib";';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'mylib');
   });
 
   it('retrieves the re-export * dependencies of modules', () => {
-    const deps = detective('export * from "mylib";');
+    const fixture = 'export * from "mylib";';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'mylib');
   });
 
   it('handles multiple imports', () => {
-    const deps = detective('import {foo, bar} from "mylib";\nimport "mylib2"');
+    const fixture = 'import {foo, bar} from "mylib";\nimport "mylib2"';
+    const deps = detective(fixture);
     assert.equal(deps.length, 2);
     assert.equal(deps[0], 'mylib');
     assert.equal(deps[1], 'mylib2');
   });
 
   it('handles default imports', () => {
-    const deps = detective('import foo from "foo";');
+    const fixture = 'import foo from "foo";';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
   });
 
   it('handles dynamic imports', () => {
-    const deps = detective('import("foo");');
+    const fixture = 'import("foo");';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
   });
 
   it('handles async imports', () => {
-    const deps = detective('() => import("foo");');
+    const fixture = '() => import("foo");';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
   });
 
   it('skips async imports when using skipAsyncImports', () => {
-    const deps = detective('() => import("foo");', { skipAsyncImports: true });
+    const fixture = '() => import("foo");';
+    const deps = detective(fixture, { skipAsyncImports: true });
     assert.equal(deps.length, 0);
   });
 
   it('retrieves dependencies from modules using "export ="', () => {
-    const deps = detective('import foo = require("mylib");');
+    const fixture = 'import foo = require("mylib");';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'mylib');
   });
 
   it('returns an empty list for non modules', () => {
-    const deps = detective('var foo = require("foo");');
+    const fixture = 'var foo = require("foo");';
+    const deps = detective(fixture);
     assert.equal(deps.length, 0);
   });
 
   it('returns an empty list for empty files', () => {
-    const deps = detective('');
+    const fixture = '';
+    const deps = detective(fixture);
     assert.equal(deps.length, 0);
   });
 
@@ -144,64 +114,118 @@ describe('detective-typescript', () => {
 
   it('does not throw with angle bracket type assertions in a module', () => {
     assert.doesNotThrow(() => {
-      detective('import foo from "foo"; var baz = <baz>bar;');
-    });
-  });
-
-  it('throws with JSX in a module and !parserOptions.jsx', () => {
-    assert.throws(() => {
-      detective('import Foo from "Foo"; var foo = <Foo/>');
-    });
-  });
-
-  it('does not throw with JSX in a module and parserOptions.jsx', () => {
-    assert.doesNotThrow(() => {
-      detective('import Foo from "Foo"; var foo = <Foo/>', { jsx: true });
+      const fixture = 'import foo from "foo"; var baz = <baz>bar;';
+      detective(fixture);
     });
   });
 
   it('parses out type annotation imports', () => {
-    const deps = detective('const x: typeof import("foo") = 0;');
+    const fixture = 'const x: typeof import("foo") = 0;';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
   });
 
   it('does not count type annotation imports if the skipTypeImports option is enabled', () => {
-    const deps = detective('const x: typeof import("foo") = 0;', { skipTypeImports: true });
+    const fixture = 'const x: typeof import("foo") = 0;';
+    const deps = detective(fixture, { skipTypeImports: true });
     assert.equal(deps.length, 0);
   });
 
-  it('parses out TypeScript >=3.8 type imports', () => {
-    const deps = detective('import type { Foo } from "foo"');
+  it('parses out TypeScript >= 3.8 type imports', () => {
+    const fixture = 'import type { Foo } from "foo"';
+    const deps = detective(fixture);
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foo');
   });
 
-  it('does not count TypeScript >=3.8 type imports if the skipTypeImports option is enabled', () => {
-    const deps = detective('import type { Foo } from "foo"', { skipTypeImports: true });
+  it('does not count TypeScript >= 3.8 type imports if the skipTypeImports option is enabled', () => {
+    const fixture = 'import type { Foo } from "foo"';
+    const deps = detective(fixture, { skipTypeImports: true });
     assert.equal(deps.length, 0);
   });
 
   it('supports CJS when mixedImports is true', () => {
-    const deps = detective('const foo = require("foobar")', { mixedImports: true });
+    const fixture = 'const foo = require("foobar")';
+    const deps = detective(fixture, { mixedImports: true });
     assert.equal(deps.length, 1);
     assert.equal(deps[0], 'foobar');
+  });
+
+  it('calls onFile callback', () => {
+    let onFileCalledArgs;
+    const onFile = (...args) => {
+      onFileCalledArgs = args;
+    };
+
+    const fixture = 'import {foo, bar} from "mylib";';
+
+    detective(fixture, { onFile });
+
+    assert.ok(onFileCalledArgs);
+    assert.ok(onFileCalledArgs[0]);
+    assert.equal(onFileCalledArgs[0].src, fixture);
+    assert.equal(typeof onFileCalledArgs[0].ast, 'object');
+    assert.equal(typeof onFileCalledArgs[0].walker, 'object');
+
+    assert.equal(typeof onFileCalledArgs[0].options, 'object');
+    assert.equal(onFileCalledArgs[0].options.onFile, onFile);
+  });
+
+  it('calls onAfterFile callback', () => {
+    let onAfterFileCalledArgs;
+    const onAfterFile = (...args) => {
+      onAfterFileCalledArgs = args;
+    };
+
+    const fixture = 'import {foo, bar} from "mylib";';
+
+    detective(fixture, { onAfterFile });
+
+    assert.ok(onAfterFileCalledArgs);
+    assert.ok(onAfterFileCalledArgs[0]);
+    assert.equal(onAfterFileCalledArgs[0].src, fixture);
+    assert.equal(typeof onAfterFileCalledArgs[0].ast, 'object');
+    assert.equal(typeof onAfterFileCalledArgs[0].walker, 'object');
+    assert.equal(Array.isArray(onAfterFileCalledArgs[0].dependencies), true);
+
+    assert.equal(typeof onAfterFileCalledArgs[0].options, 'object');
+    assert.equal(onAfterFileCalledArgs[0].options.onAfterFile, onAfterFile);
+  });
+
+  describe('jsx', () => {
+    it('throws with JSX in a module and !parserOptions.jsx', () => {
+      assert.throws(() => {
+        const fixture = 'import Foo from "Foo"; var foo = <Foo/>;';
+        detective(fixture);
+      }, /^TSError: '>' expected.$/);
+    });
+
+    it('does not throw with JSX in a module and parserOptions.jsx', () => {
+      assert.doesNotThrow(() => {
+        const fixture = 'import Foo from "Foo"; var foo = <Foo/>;';
+        detective(fixture, { jsx: true });
+      });
+    });
   });
 
   describe('tsx', () => {
     it('does not throw when given no options', () => {
       assert.doesNotThrow(() => {
-        detective.tsx('import Foo from "Foo"; var foo = <Foo/>');
+        const fixture = 'import Foo from "Foo"; var foo = <Foo/>;';
+        detective.tsx(fixture);
       });
     });
 
     it('returns the import of a tsx file when using option', () => {
-      const results = detective('import Foo from "Foo"; var foo = <Foo/>', { jsx: true });
+      const fixture = 'import Foo from "Foo"; var foo = <Foo/>;';
+      const results = detective(fixture, { jsx: true });
       assert.equal(results[0], 'Foo');
     });
 
     it('returns the import of a tsx file when using API call', () => {
-      const results = detective.tsx('import Foo from "Foo"; var foo = <Foo/>');
+      const fixture = 'import Foo from "Foo"; var foo = <Foo/>;';
+      const results = detective.tsx(fixture);
       assert.equal(results[0], 'Foo');
     });
   });
