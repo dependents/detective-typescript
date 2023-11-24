@@ -145,6 +145,36 @@ describe('detective-typescript', () => {
     assert.equal(deps.length, 0);
   });
 
+  it('does not count TypeScript named type imports if the skipTypeImports option is enabled', () => {
+    const fixture = 'import { type Foo } from "foo"';
+    const deps = detective(fixture, { skipTypeImports: true });
+    assert.equal(deps.length, 0);
+
+    // If not all the named imports are type imports, then it still counts as a dep.
+    const fixture2 = 'import { type Foo, Bar } from "foo"';
+    const deps2 = detective(fixture2, { skipTypeImports: true });
+    assert.equal(deps2.length, 1);
+    assert.equal(deps2[0], 'foo');
+  });
+
+  it('does not count TypeScript type exports if the skipTypeImports option is enabled', () => {
+    const fixture = 'export type { Foo } from "foo"';
+    const deps = detective(fixture, { skipTypeImports: true });
+    assert.equal(deps.length, 0);
+  });
+
+  it('does not count TypeScript named exports if the skipTypeImports option is enabled', () => {
+    const fixture = 'export { type Foo } from "foo"';
+    const deps = detective(fixture, { skipTypeImports: true });
+    assert.equal(deps.length, 0);
+
+    // If not all the named exports are type exports, then it still counts as a dep.
+    const fixture2 = 'export { type Foo, Bar } from "foo"';
+    const deps2 = detective(fixture2, { skipTypeImports: true });
+    assert.equal(deps2.length, 1);
+    assert.equal(deps2[0], 'foo');
+  });
+
   it('supports CJS when mixedImports is true', () => {
     const fixture = 'const foo = require("foobar")';
     const deps = detective(fixture, { mixedImports: true });
