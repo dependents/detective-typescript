@@ -48,7 +48,7 @@ module.exports = (src, options = {}) => {
       }
 
       case 'ImportDeclaration': {
-        if (skipTypeImports && node.importKind === 'type') {
+        if (skipTypeImports && isTypeImports(node)) {
           break;
         }
 
@@ -61,6 +61,10 @@ module.exports = (src, options = {}) => {
 
       case 'ExportNamedDeclaration':
       case 'ExportAllDeclaration': {
+        if (skipTypeImports && isTypeExports(node)) {
+          break;
+        }
+
         if (node.source?.value) {
           dependencies.push(node.source.value);
         }
@@ -131,4 +135,24 @@ function extractDependencyFromRequire(node) {
 
 function extractDependencyFromMainRequire(node) {
   return node.arguments[0].value;
+}
+
+function isTypeImports(node) {
+  if (node.importKind === 'type') {
+    return true;
+  }
+
+  if (node.specifiers?.length && node.specifiers?.every(n => n.importKind === 'type')) {
+    return true;
+  }
+}
+
+function isTypeExports(node) {
+  if (node.exportKind === 'type') {
+    return true;
+  }
+
+  if (node.specifiers?.length && node.specifiers?.every(n => n.exportKind === 'type')) {
+    return true;
+  }
 }
