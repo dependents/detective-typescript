@@ -7,7 +7,7 @@
 > Get the dependencies of TypeScript module
 
 ```sh
-npm install detective-typescript
+npm install detective-typescript typescript
 ```
 
 ## Usage
