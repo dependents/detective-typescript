@@ -182,6 +182,20 @@ test('supports CJS when mixedImports is true', () => {
   assert.equal(deps[0], 'foobar');
 });
 
+test('supports CJS template literal require when mixedImports is true', () => {
+  const fixture = 'const foo = require(`foobar`)';
+  const deps = detective(fixture, { mixedImports: true });
+  assert.equal(deps.length, 1);
+  assert.equal(deps[0], 'foobar');
+});
+
+test('supports require.main.require when mixedImports is true', () => {
+  const fixture = 'const foo = require.main.require("foobar")';
+  const deps = detective(fixture, { mixedImports: true });
+  assert.equal(deps.length, 1);
+  assert.equal(deps[0], 'foobar');
+});
+
 test('calls onFile callback', () => {
   let onFileCalledArgs;
   const onFile = (...args) => {
