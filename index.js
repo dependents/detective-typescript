@@ -94,21 +94,7 @@ module.exports = (src, options = {}) => {
       }
 
       case 'CallExpression': {
-        if (!mixedImports || !types.isRequire(node) ||
-            !node.arguments ||
-            node.arguments.length === 0) {
-          break;
-        }
-
-        if (types.isPlainRequire(node)) {
-          const result = extractDependencyFromRequire(node);
-          if (result) {
-            dependencies.push(result);
-          }
-        } else if (types.isMainScopedRequire(node)) {
-          dependencies.push(extractDependencyFromMainRequire(node));
-        }
-
+        handleCallExpression(node, mixedImports, dependencies);
         break;
       }
 
@@ -155,6 +141,21 @@ function isTypeImports(node) {
 
   if (node.specifiers?.length && node.specifiers?.every(n => n.importKind === 'type')) {
     return true;
+  }
+}
+
+function handleCallExpression(node, mixedImports, dependencies) {
+  if (!mixedImports || !types.isRequire(node) || !node.arguments || node.arguments.length === 0) {
+    return;
+  }
+
+  if (types.isPlainRequire(node)) {
+    const result = extractDependencyFromRequire(node);
+    if (result) {
+      dependencies.push(result);
+    }
+  } else if (types.isMainScopedRequire(node)) {
+    dependencies.push(extractDependencyFromMainRequire(node));
   }
 }
 
