@@ -10,8 +10,9 @@
   "scripts": {
     "lint": "xo",
     "fix": "xo --fix",
-    "test": "npm run lint && uvu test",
-    "test:ci": "c8 uvu test"
+    "uvu": "uvu test",
+    "test": "npm run lint && npm run uvu",
+    "test:ci": "c8 npm run uvu"
   },
   "repository": {
     "type": "git",
