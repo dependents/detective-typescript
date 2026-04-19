@@ -33,4 +33,4 @@ const dependencies = detective(mySourceCode);
 
 ## License
 
-MIT
+[MIT](LICENSE)
