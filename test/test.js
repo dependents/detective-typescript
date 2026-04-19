@@ -243,7 +243,7 @@ jsx('throws with JSX in a module and !parserOptions.jsx', () => {
   assert.throws(() => {
     const fixture = 'import Foo from "Foo"; var foo = <Foo/>;';
     detective(fixture);
-  }, /^TSError: '>' expected.$/);
+  }, /^TSError: '>' expected\.$/);
 });
 
 jsx('does not throw with JSX in a module and parserOptions.jsx', () => {
