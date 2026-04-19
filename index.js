@@ -143,7 +143,7 @@ function isTypeImports(node) {
     return true;
   }
 
-  if (node.specifiers?.length && node.specifiers?.every(n => n.importKind === 'type')) {
+  if (node.specifiers?.length && node.specifiers.every(n => n.importKind === 'type')) {
     return true;
   }
 }
@@ -168,7 +168,7 @@ function isTypeExports(node) {
     return true;
   }
 
-  if (node.specifiers?.length && node.specifiers?.every(n => n.exportKind === 'type')) {
+  if (node.specifiers?.length && node.specifiers.every(n => n.exportKind === 'type')) {
     return true;
   }
 }
