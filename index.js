@@ -42,7 +42,7 @@ module.exports = (src, options = {}) => {
     });
   }
 
-  walker.walk(src, node => {
+  walker.walk(ast, node => {
     switch (node.type) {
       case 'ImportExpression': {
         if (!options.skipAsyncImports && node.source?.value) {
