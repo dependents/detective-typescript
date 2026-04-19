@@ -14,17 +14,21 @@ module.exports = (src, options = {}) => {
   if (src === undefined) throw new Error('src not given');
   if (src === '') return [];
 
-  const walkerOptions = { ...options, parser };
+  // Destructure detective-specific options; the rest are forwarded to the walker/parser.
+  const {
+    // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types
+    // https://www.typescriptlang.org/v2/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
+    skipTypeImports: skipTypeImportsRaw,
+    mixedImports: mixedImportsRaw,
+    skipAsyncImports,
+    onFile,
+    onAfterFile,
+    ...walkerOptions
+  } = options;
 
-  // Determine whether to skip "type-only" imports
-  // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types
-  // https://www.typescriptlang.org/v2/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
-  const skipTypeImports = Boolean(options.skipTypeImports);
-  // Remove skipTypeImports option, as this option may not be recognized by the walker/parser
-  delete walkerOptions.skipTypeImports;
-
-  const mixedImports = Boolean(options.mixedImports);
-  delete walkerOptions.mixedImports;
+  const skipTypeImports = Boolean(skipTypeImportsRaw);
+  const mixedImports = Boolean(mixedImportsRaw);
+  walkerOptions.parser = parser;
 
   const walker = new Walker(walkerOptions);
   const dependencies = [];
@@ -33,8 +37,8 @@ module.exports = (src, options = {}) => {
   // then reuse that AST below in our walker walk.
   const ast = typeof src === 'string' ? walker.parse(src) : src;
 
-  if (options.onFile) {
-    options.onFile({
+  if (onFile) {
+    onFile({
       options,
       src,
       ast,
@@ -45,7 +49,7 @@ module.exports = (src, options = {}) => {
   walker.walk(ast, node => {
     switch (node.type) {
       case 'ImportExpression': {
-        if (!options.skipAsyncImports && node.source?.value) {
+        if (!skipAsyncImports && node.source?.value) {
           dependencies.push(node.source.value);
         }
 
@@ -103,8 +107,8 @@ module.exports = (src, options = {}) => {
     }
   });
 
-  if (options.onAfterFile) {
-    options.onAfterFile({
+  if (onAfterFile) {
+    onAfterFile({
       options,
       src,
       ast,
