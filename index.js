@@ -149,6 +149,16 @@ function isTypeImports(node) {
   }
 }
 
+function isTypeExports(node) {
+  if (node.exportKind === 'type') {
+    return true;
+  }
+
+  if (node.specifiers?.length && node.specifiers.every(n => n.exportKind === 'type')) {
+    return true;
+  }
+}
+
 function handleCallExpression(node, mixedImports) {
   if (!mixedImports || !types.isRequire(node) || !node.arguments || node.arguments.length === 0) {
     return;
@@ -160,15 +170,5 @@ function handleCallExpression(node, mixedImports) {
 
   if (types.isMainScopedRequire(node)) {
     return extractDependencyFromMainRequire(node);
-  }
-}
-
-function isTypeExports(node) {
-  if (node.exportKind === 'type') {
-    return true;
-  }
-
-  if (node.specifiers?.length && node.specifiers.every(n => n.exportKind === 'type')) {
-    return true;
   }
 }
