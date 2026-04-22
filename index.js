@@ -98,7 +98,8 @@ module.exports = (src, options = {}) => {
       }
 
       case 'CallExpression': {
-        handleCallExpression(node, mixedImports, dependencies);
+        const dep = handleCallExpression(node, mixedImports);
+        if (dep) dependencies.push(dep);
         break;
       }
 
@@ -148,18 +149,17 @@ function isTypeImports(node) {
   }
 }
 
-function handleCallExpression(node, mixedImports, dependencies) {
+function handleCallExpression(node, mixedImports) {
   if (!mixedImports || !types.isRequire(node) || !node.arguments || node.arguments.length === 0) {
     return;
   }
 
   if (types.isPlainRequire(node)) {
-    const result = extractDependencyFromRequire(node);
-    if (result) {
-      dependencies.push(result);
-    }
-  } else if (types.isMainScopedRequire(node)) {
-    dependencies.push(extractDependencyFromMainRequire(node));
+    return extractDependencyFromRequire(node);
+  }
+
+  if (types.isMainScopedRequire(node)) {
+    return extractDependencyFromMainRequire(node);
   }
 }
 
