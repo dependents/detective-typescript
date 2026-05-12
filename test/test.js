@@ -1,8 +1,6 @@
-'use strict';
-
-const assert = require('node:assert').strict;
-const { suite } = require('uvu');
-const detective = require('../index.js');
+import { strict as assert } from 'node:assert';
+import { suite } from 'uvu';
+import detective from '../index.js';
 
 const ast = {
   type: 'Program',

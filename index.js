@@ -1,8 +1,6 @@
-'use strict';
-
-const parser = require('@typescript-eslint/typescript-estree');
-const types = require('ast-module-types');
-const Walker = require('node-source-walk');
+import parser from '@typescript-eslint/typescript-estree';
+import types from 'ast-module-types';
+import Walker from 'node-source-walk';
 
 /**
  * Extracts the dependencies of the supplied TypeScript module
@@ -10,7 +8,7 @@ const Walker = require('node-source-walk');
  * @param  {String|Object} src - File's content or AST
  * @return {String[]}
  */
-module.exports = (src, options = {}) => {
+export default function detective(src, options = {}) {
   if (src === undefined) throw new Error('src not given');
   if (src === '') return [];
 
@@ -121,10 +119,10 @@ module.exports = (src, options = {}) => {
   }
 
   return dependencies;
-};
+}
 
-module.exports.tsx = (src, options = {}) => {
-  return module.exports(src, { ...options, jsx: true });
+detective.tsx = function(src, options = {}) {
+  return detective(src, { ...options, jsx: true });
 };
 
 function extractDependencyFromRequire(node) {

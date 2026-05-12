@@ -12,9 +12,11 @@ npm install detective-typescript typescript
 
 ## Usage
 
+### ESM
+
 ```js
-const fs = require('fs');
-const detective = require('detective-typescript');
+import fs from 'node:fs';
+import detective from 'detective-typescript';
 
 const mySourceCode = fs.readFileSync('myfile.ts', 'utf8');
 
@@ -23,6 +25,12 @@ const dependencies = detective(mySourceCode);
 
 // For TSX/JSX files
 const tsxDependencies = detective.tsx(mySourceCode);
+```
+
+### CommonJS
+
+```js
+const { default: detective } = require('detective-typescript');
 ```
 
 ## Options

@@ -3,7 +3,10 @@
   "version": "14.1.2",
   "author": "Patrik Henningsson <patrik.henningsson@gmail.com>",
   "description": "Get the dependencies of a TypeScript module",
-  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
   "files": [
     "index.js"
   ],
@@ -27,7 +30,7 @@
     "import"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0 || >=22.12.0"
   },
   "license": "MIT",
   "homepage": "https://github.com/dependents/detective-typescript",
