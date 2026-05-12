@@ -27,7 +27,7 @@
     "import"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "license": "MIT",
   "homepage": "https://github.com/dependents/detective-typescript",
@@ -35,51 +35,14 @@
     "typescript": "^5.4.4 || ^6.0.2"
   },
   "dependencies": {
-    "@typescript-eslint/typescript-estree": "^8.58.2",
-    "ast-module-types": "^6.0.1",
-    "node-source-walk": "^7.0.1"
+    "@typescript-eslint/typescript-estree": "^8.59.3",
+    "ast-module-types": "^6.0.2",
+    "node-source-walk": "^7.0.2"
   },
   "devDependencies": {
-    "c8": "^10.1.3",
+    "c8": "^11.0.0",
     "typescript": "^6.0.3",
     "uvu": "^0.5.6",
-    "xo": "^0.60.0"
-  },
-  "xo": {
-    "space": true,
-    "ignores": [
-      "index.d.ts",
-      "test/fixtures/*"
-    ],
-    "rules": {
-      "arrow-body-style": "off",
-      "capitalized-comments": "off",
-      "comma-dangle": [
-        "error",
-        "never"
-      ],
-      "curly": [
-        "error",
-        "multi-line"
-      ],
-      "operator-linebreak": [
-        "error",
-        "after"
-      ],
-      "object-curly-spacing": [
-        "error",
-        "always"
-      ],
-      "prefer-template": "error",
-      "space-before-function-paren": [
-        "error",
-        "never"
-      ],
-      "unicorn/no-anonymous-default-export": "off",
-      "unicorn/prefer-module": "off",
-      "unicorn/prefer-node-protocol": "off",
-      "unicorn/prefer-top-level-await": "off",
-      "unicorn/prevent-abbreviations": "off"
-    }
+    "xo": "^2.0.2"
   }
 }
