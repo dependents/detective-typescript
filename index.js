@@ -1,5 +1,5 @@
 import parser from '@typescript-eslint/typescript-estree';
-import types from 'ast-module-types';
+import { isRequire, isPlainRequire, isMainScopedRequire } from 'ast-module-types';
 import Walker from 'node-source-walk';
 
 /**
@@ -144,15 +144,15 @@ function isTypeNode(node, kind) {
 }
 
 function handleCallExpression(node, mixedImports) {
-  if (!mixedImports || !types.isRequire(node) || !node.arguments || node.arguments.length === 0) {
+  if (!mixedImports || !isRequire(node) || !node.arguments || node.arguments.length === 0) {
     return;
   }
 
-  if (types.isPlainRequire(node)) {
+  if (isPlainRequire(node)) {
     return extractDependencyFromRequire(node);
   }
 
-  if (types.isMainScopedRequire(node)) {
+  if (isMainScopedRequire(node)) {
     return extractDependencyFromMainRequire(node);
   }
 }
