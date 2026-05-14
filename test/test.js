@@ -26,7 +26,7 @@ const ast = {
 
 const test = suite('detective-typescript');
 
-test('accepts an ast', () => {
+test('accepts an AST', () => {
   const deps = detective(ast);
   assert.equal(deps.length, 0);
 });
@@ -94,7 +94,7 @@ test('retrieves dependencies from modules using "export ="', () => {
   assert.equal(deps[0], 'mylib');
 });
 
-test('returns an empty list for non modules', () => {
+test('returns an empty list for non-modules', () => {
   const fixture = 'var foo = require("foo");';
   const deps = detective(fixture);
   assert.equal(deps.length, 0);
@@ -163,7 +163,7 @@ test('does not count TypeScript type exports if the skipTypeImports option is en
   assert.equal(deps.length, 0);
 });
 
-test('does not count TypeScript named exports if the skipTypeImports option is enabled', () => {
+test('does not count TypeScript named type exports if the skipTypeImports option is enabled', () => {
   const fixture = 'export { type Foo } from "foo"';
   const deps = detective(fixture, { skipTypeImports: true });
   assert.equal(deps.length, 0);
@@ -239,7 +239,7 @@ test.run();
 
 const jsx = suite('jsx');
 
-jsx('throws with JSX in a module and !parserOptions.jsx', () => {
+jsx('throws with JSX in a module when parserOptions.jsx is not set', () => {
   assert.throws(() => {
     const fixture = 'import Foo from "Foo"; var foo = <Foo/>;';
     detective(fixture);
