@@ -57,7 +57,7 @@ module.exports = (src, options = {}) => {
       }
 
       case 'ImportDeclaration': {
-        if (skipTypeImports && isTypeImports(node)) {
+        if (skipTypeImports && isTypeNode(node, 'importKind')) {
           break;
         }
 
@@ -70,7 +70,7 @@ module.exports = (src, options = {}) => {
 
       case 'ExportNamedDeclaration':
       case 'ExportAllDeclaration': {
-        if (skipTypeImports && isTypeExports(node)) {
+        if (skipTypeImports && isTypeNode(node, 'exportKind')) {
           break;
         }
 
@@ -90,7 +90,9 @@ module.exports = (src, options = {}) => {
       }
 
       case 'TSImportType': {
-        if (!skipTypeImports && node.argument.type === 'TSLiteralType') {
+        if (skipTypeImports) break;
+
+        if (node.argument.type === 'TSLiteralType') {
           dependencies.push(node.argument.literal.value);
         }
 
@@ -139,24 +141,8 @@ function extractDependencyFromMainRequire(node) {
   return node.arguments[0].value;
 }
 
-function isTypeImports(node) {
-  if (node.importKind === 'type') {
-    return true;
-  }
-
-  if (node.specifiers?.length && node.specifiers.every(n => n.importKind === 'type')) {
-    return true;
-  }
-}
-
-function isTypeExports(node) {
-  if (node.exportKind === 'type') {
-    return true;
-  }
-
-  if (node.specifiers?.length && node.specifiers.every(n => n.exportKind === 'type')) {
-    return true;
-  }
+function isTypeNode(node, kind) {
+  return node[kind] === 'type' || (node.specifiers?.length > 0 && node.specifiers.every(n => n[kind] === 'type'));
 }
 
 function handleCallExpression(node, mixedImports) {
