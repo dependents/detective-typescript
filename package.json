@@ -13,9 +13,9 @@
   "scripts": {
     "lint": "xo",
     "fix": "xo --fix",
-    "uvu": "uvu test",
-    "test": "npm run lint && npm run uvu",
-    "test:ci": "c8 npm run uvu"
+    "vitest": "vitest",
+    "test": "npm run lint && vitest run",
+    "test:ci": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -43,9 +43,9 @@
     "node-source-walk": "^8.0.0"
   },
   "devDependencies": {
-    "c8": "^11.0.0",
+    "@vitest/coverage-v8": "^4.1.7",
     "typescript": "^6.0.3",
-    "uvu": "^0.5.6",
+    "vitest": "^4.1.7",
     "xo": "^2.0.2"
   }
 }
