@@ -90,8 +90,8 @@ export default function detective(src, options = {}) {
       case 'TSImportType': {
         if (skipTypeImports) break;
 
-        if (node.argument.type === 'TSLiteralType') {
-          dependencies.push(node.argument.literal.value);
+        if (node.source?.value) {
+          dependencies.push(node.source.value);
         }
 
         break;
